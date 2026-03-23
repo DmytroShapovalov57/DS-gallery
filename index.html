@@ -49,10 +49,47 @@
   <div class="page active" id="page-home">
     <main>
 
-    </main>
+      <!-- News -->
+      <div class="home-section">
+        <h1>News from the world of art</h1>
+        <div class="news-card">
+          <div>
+            <h2>Jeff Koons’s Giant Play-Doh Sculpture Could Fetch $20 Million at Christie’s.</h2>
+            <p>When the Whitney Museum of American Art staged its blockbuster retrospective of Jeff Koons in 2014, the most photographed work was undeniably Play-Doh (1994–2014), an 11-foot-tall aluminum sculpture that looked as if an artistic young giant had created a multicolored pile of clay and then left it behind.<br>
+              Now, a version of that candy-hued work is heading to auction. Christie’s will offer an edition of Play-Doh at its evening sale of postwar and contemporary art in New York on May 17. The work, consigned from a European collection, is expected to sell for a price “in the region of $20 million.”
+              This marks the first time that a Play-Doh sculpture, one of five unique versions from the artist’s notoriously ambitious and pricey “Celebration” series (each one featuring a different sequence of colors), has come up for auction.<br>
+              By the time Koons finally revealed Play-Doh to the public in his Whitney retrospective, it was already the stuff of legend. The work took around two decades to produce as the notoriously perfectionist Koons fiddled with the medium and refined the production process. (The owners of the version shown at the Whitney, LA-based collectors Bill and Maria Bell, originally committed to buying the work in 2005, and continued to fund it as Koons ironed out the kinks for the next decade.)
+            </p>
+          </div>
+          <div class="img-ph"><img class="art-image" src="images/home/news.jpg" alt=""/></div>
+        </div>
+      </div>
 
-    <!-- Footer -->
-    <footer> </footer>
+      <!-- Artwork of the day -->
+      <div class="home-section">
+        <h1>Artwork of the day</h1>
+        <div class="day-wrap" onclick="showPage('detail', DAY_ITEM)" style="cursor:pointer">
+          <img src="images/home/Girl_with_a_Pearl_Earring.jpg" alt=""/>
+          <div class="bottom-actions">
+            <div class="sm-btn bag-btn" id="day-bag"
+                 onclick="event.stopPropagation(); addToCart(DAY_ITEM)">
+              <img src="icons/bag.svg" alt="Add to cart"/>
+            </div>
+            <div class="sm-btn bookmark-btn" id="day-bookmark"
+                 onclick="event.stopPropagation(); toggleSaved(DAY_ITEM)">
+              <img src="icons/bookmark.svg" alt="Save"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- New Arrivals -->
+      <div class="home-section">
+        <h1>New Arrivals</h1>
+        <div class="masonry-grid" id="arrivals-grid"></div>
+      </div>
+
+    </main>
   </div>
 
 </div><!-- /body-wrap -->
