@@ -41,9 +41,9 @@
 
   <!-- Sidebar -->
   <aside>
-    <button class="nav-link active" onclick="showPage('home')">Home</button>
-    <button class="nav-link" onclick="showPage('artworks')">Artworks</button>
-    <button class="nav-link" onclick="showPage('artists')">Artists</button>
+    <button class="side-link active" onclick="showPage('home')">Home</button>
+    <button class="side-link" onclick="showPage('artworks')">Artworks</button>
+    <button class="side-link" onclick="showPage('artists')">Artists</button>
   </aside>
 
   <!-- Page: home -->
@@ -55,7 +55,7 @@
         <h1>News from the world of art</h1>
         <article class="news-card">
           <div>
-            <h2>Jeff Koons's Giant Play-Doh Sculpture Could Fetch $20 Million at Christie's.</h2>
+            <h2 class="news-title">Jeff Koons's Giant Play-Doh Sculpture Could Fetch $20 Million at Christie's.</h2>
             <p>When the Whitney Museum of American Art staged its blockbuster retrospective of Jeff Koons in 2014, the most photographed work was undeniably Play-Doh (1994–2014), an 11-foot-tall aluminum sculpture that looked as if an artistic young giant had created a multicolored pile of clay and then left it behind.<br>
               Now, a version of that candy-hued work is heading to auction. Christie's will offer an edition of Play-Doh at its evening sale of postwar and contemporary art in New York on May 17. The work, consigned from a European collection, is expected to sell for a price "in the region of $20 million."
               This marks the first time that a Play-Doh sculpture, one of five unique versions from the artist's notoriously ambitious and pricey "Celebration" series (each one featuring a different sequence of colors), has come up for auction.<br>
@@ -205,6 +205,76 @@
     </main>
   </div>
 
+  <!-- Page: login -->
+  <div class="page" id="page-login">
+    <main class="auth-main">
+      <div class="auth-card">
+        <h1 class="auth-title">Log in</h1>
+        <p class="auth-sub">Welcome back to DS Gallery</p>
+
+        <div class="auth-field">
+          <label class="auth-label">Email</label>
+          <input class="auth-input" id="login-email" type="email" placeholder="your@email.com"/>
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">Password</label>
+          <input class="auth-input" type="password" placeholder="••••••••"/>
+        </div>
+
+        <div class="auth-forgot">
+          <a href="#" onclick="return false">Forgot password?</a>
+        </div>
+
+        <button class="auth-btn" onclick="loginFromForm()">Log in</button>
+
+        <p class="auth-switch">
+          Don't have an account?
+          <a href="#" onclick="showPage('register'); return false">Register</a>
+        </p>
+      </div>
+    </main>
+  </div>
+
+  <!-- Page: register -->
+  <div class="page" id="page-register">
+    <main class="auth-main">
+      <div class="auth-card">
+        <h1 class="auth-title">Create account</h1>
+        <p class="auth-sub">Join DS Gallery to collect and save art</p>
+
+        <div class="auth-row">
+          <div class="auth-field">
+            <label class="auth-label">First name</label>
+            <input class="auth-input" id="reg-firstname" type="text" placeholder="Claude"/>
+          </div>
+          <div class="auth-field">
+            <label class="auth-label">Last name</label>
+            <input class="auth-input" type="text" placeholder="Monet"/>
+          </div>
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">Email</label>
+          <input class="auth-input" type="email" placeholder="your@email.com"/>
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">Password</label>
+          <input class="auth-input" type="password" placeholder="••••••••"/>
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">Confirm password</label>
+          <input class="auth-input" type="password" placeholder="••••••••"/>
+        </div>
+
+        <button class="auth-btn" onclick="registerFromForm()">Create account</button>
+
+        <p class="auth-switch">
+          Already have an account?
+          <a href="#" onclick="showPage('login'); return false">Log in</a>
+        </p>
+      </div>
+    </main>
+  </div>
+
 </div>
 
 
@@ -216,9 +286,7 @@
     <a href="#"><img src="icons/youtube.svg" alt="YouTube"/></a>
     <a href="#"><img src="icons/linkedin.svg" alt="LinkedIn"/></a>
   </div>
-  <div class="footer-col"><h4>Use cases</h4><ul><li><a href="#">UI design</a></li><li><a href="#">UX design</a></li><li><a href="#">Wireframing</a></li><li><a href="#">Diagramming</a></li><li><a href="#">Brainstorming</a></li><li><a href="#">Online whiteboard</a></li><li><a href="#">Team collaboration</a></li></ul></div>
-  <div class="footer-col"><h4>Explore</h4><ul><li><a href="#">Design</a></li><li><a href="#">Prototyping</a></li><li><a href="#">Development features</a></li><li><a href="#">Design systems</a></li><li><a href="#">Collaboration features</a></li><li><a href="#">Design process</a></li><li><a href="#">FigJam</a></li></ul></div>
-  <div class="footer-col"><h4>Resources</h4><ul><li><a href="#">Blog</a></li><li><a href="#">Best practices</a></li><li><a href="#">Colors</a></li><li><a href="#">Color wheel</a></li><li><a href="#">Support</a></li><li><a href="#">Developers</a></li><li><a href="#">Resource library</a></li></ul></div>
+  <p class="footer-text">© 2026 DSgallery. All rights reserved.</p>
 </footer>
 
 <script src="script.js"></script>
