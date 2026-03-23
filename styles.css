@@ -223,7 +223,6 @@ h1 {
     height: 300px;
     position: relative;
 }
-.aw-tile .bottom-actions { opacity: 0;}
 
 .tile-info { padding: 9px 12px; }
 .tile-info .name  { font-size: 13px; color: #555; }
