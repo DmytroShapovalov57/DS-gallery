@@ -3,219 +3,224 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DSgallery — Cart</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
   <link rel="stylesheet" href="style.css"/>
   <style>
-    .cart-table { width: 100%; border-collapse: collapse; }
-    .cart-table th {
-      font-size: 10.5px; font-weight: 500; letter-spacing: 1px;
-      text-transform: uppercase; color: var(--muted);
-      padding: 0 12px 12px 12px; text-align: left; border-bottom: 1px solid var(--border);
-    }
-    .cart-table td { padding: 16px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-    .cart-table tr:last-child td { border-bottom: none; }
+      .cart-thumb {
+          width: 72px; height: 56px; border-radius: 4px;
+          object-fit: cover; background: var(--card-bg); display: block; flex-shrink: 0;
+      }
+      .qty-control {
+          display: inline-flex; align-items: center;
+          border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+      }
+      .qty-btn {
+          width: 28px; height: 28px; border: none; background: none;
+          font-size: 16px; cursor: pointer; color: var(--fg);
+          display: flex; align-items: center; justify-content: center;
+      }
+      .qty-num {
+          width: 32px; text-align: center; font-size: 13px;
+          font-family: var(--font-body); border: none;
+          border-left: 1px solid var(--border); border-right: 1px solid var(--border);
+          outline: none; background: none;
+          -moz-appearance: textfield;
+      }
+      .qty-num::-webkit-outer-spin-button,
+      .qty-num::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
-    .cart-thumb {
-      width: 72px; height: 56px; border-radius: 4px;
-      object-fit: cover; background: var(--card-bg); display: block;
-    }
-    .cart-name { font-size: 13px; color: #444; }
-    .cart-price { font-size: 13px; font-weight: 500; white-space: nowrap; }
-
-    .qty-control {
-      display: inline-flex; align-items: center; gap: 0;
-      border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
-    }
-    .qty-btn {
-      width: 28px; height: 28px; border: none; background: none;
-      font-size: 16px; cursor: pointer; color: var(--fg);
-      display: flex; align-items: center; justify-content: center;
-      transition: background .15s;
-    }
-    .qty-btn:hover { background: var(--card-bg); }
-    .qty-num {
-      width: 32px; text-align: center; font-size: 13px;
-      font-family: var(--font-body); border: none;
-      border-left: 1px solid var(--border); border-right: 1px solid var(--border);
-      outline: none; background: none;
-    }
-
-    .del-btn {
-      width: 28px; height: 28px; border: 1px solid var(--border);
-      border-radius: 8px; background: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background .15s, border-color .15s;
-    }
-    .del-btn:hover { background: #fef2f2; border-color: #fca5a5; }
-    .del-btn svg { width: 13px; height: 13px; stroke: #888; }
-    .del-btn:hover svg { stroke: #ef4444; }
-
-    .cart-total-row {
-      display: flex; justify-content: space-between; align-items: baseline;
-      padding: 16px 0 0 0;
-    }
-    .cart-total-label { font-size: 10.5px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
-    .cart-total-value { font-size: 22px; font-weight: 500; font-family: var(--font-display); }
-
-    .empty-state {
-      text-align: center; padding: 60px 20px; color: var(--muted);
-    }
-    .empty-state p { font-size: 15px; margin-bottom: 20px; }
+      .cart-row {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 14px 0;
+          border-bottom: 1px solid var(--border);
+          flex-wrap: wrap;
+      }
+      .cart-row-name {
+          flex: 1;
+          min-width: 80px;
+      }
+      .cart-row-name h2 { margin: 0; }
+      .cart-row-controls {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          flex-shrink: 0;
+      }
+      .cart-row-price { margin: 0; white-space: nowrap; }
   </style>
 </head>
+
 <body class="d-flex flex-column" style="min-height:100vh">
 
-<!-- Header -->
-<nav class="navbar px-4 py-2 border-bottom sticky-top bg-white d-flex justify-content-between">
-  <a href="home.html"><img src="../images/home/logo.png" alt="DSgallery" style="max-height:40px"/></a>
-  <div class="d-flex align-items-center gap-2">
-    <div class="search-wrap">
-      <input type="text" placeholder="Search"/>
-      <img class="icon-search" src="../icons/search.svg" alt=""/>
+  <!-- Header -->
+  <nav class="navbar px-4 py-2 border-bottom sticky-top bg-white d-flex justify-content-between">
+    <a href="home.html"><img src="../images/home/logo.png" alt="DSgallery" style="max-height:40px"/></a>
+    <div class="d-flex align-items-center gap-2">
+      <div class="search-wrap">
+        <input type="text" placeholder="Search"/>
+        <img class="icon-search" src="../icons/search.svg" alt=""/>
+      </div>
+      <a class="icon-btn active" href="cart.html"><img src="../icons/cart.svg" alt="Cart"/></a>
+      <a class="icon-btn" href="saved.html"><img src="../icons/bookmark.svg" alt="Saved"/></a>
+      <a class="log-btn" href="login.html">Log in</a>
+      <a class="log-btn" href="register.html">Register</a>
     </div>
-    <a class="icon-btn" href="cart.html"><img src="../icons/cart.svg" alt="Cart"/></a>
-    <a class="icon-btn" href="saved.html"><img src="../icons/bookmark.svg" alt="Saved"/></a>
-    <a class="log-btn" href="login.html">Log in</a>
-    <a class="log-btn" href="register.html">Register</a>
-  </div>
-</nav>
+  </nav>
 
-<!-- Body -->
-<div class="d-flex flex-grow-1">
+  <!-- Body -->
+  <div class="d-flex flex-grow-1">
 
-  <!-- Sidebar -->
-  <aside>
-    <nav>
-      <a class="side-link" href="home.html">Home</a>
-      <a class="side-link" href="artworks.html">Artworks</a>
-      <a class="side-link" href="artists.html">Artists</a>
-    </nav>
-  </aside>
+    <!-- Sidebar -->
+    <aside>
+      <nav>
+        <a class="side-link" href="home.html">Home</a>
+        <a class="side-link" href="artworks.html">Artworks</a>
+      </nav>
+    </aside>
 
-  <!-- PAGE: CART -->
-  <main class="p-4 p-md-5 overflow-y-auto flex-grow-1">
-    <h1>Cart</h1>
+    <!-- Cart -->
+    <main class="p-4 flex-grow-1" style="min-width:0;overflow-y:auto">
+      <h1>Cart</h1>
 
-    <div id="cart-body">
-      <table class="cart-table" id="cart-table">
-        <thead>
-        <tr>
-          <th style="width:80px"></th>
-          <th>Artwork</th>
-          <th style="width:130px">Quantity</th>
-          <th style="width:100px">Price</th>
-          <th style="width:48px"></th>
-        </tr>
-        </thead>
-        <tbody id="cart-rows"></tbody>
-      </table>
+      <div class="row gx-3 align-items-center py-3 border-bottom border-top">
+        <div class="col-auto col-md-1">
+          <img class="cart-thumb" src="../images/art/van_gogh/Bridges_across_the_Seine_at_Asnieres.jpg" alt=""/>
+        </div>
+        <div class="col col-md-5">
+          <h2>Bridges Across the Seine at Asnières</h2>
+        </div>
+        <div class="col-auto col-md-3">
+          <div class="qty-control">
+            <button class="qty-btn">−</button>
+            <input class="qty-num" type="number" min="1" value="1"/>
+            <button class="qty-btn">+</button>
+          </div>
+        </div>
+        <div class="col-auto col-md-2">
+          <h2>879€</h2>
+        </div>
+        <div class="row col-md-1 gap-1">
+            <button class="sm-btn in-cart"><img src="../icons/bag.svg" alt=""/></button>
+            <button class="sm-btn"><img src="../icons/bookmark.svg" alt=""/></button>
+        </div>
+      </div>
 
-      <div id="cart-footer" class="mt-4 border-top pt-3">
-        <div class="cart-total-row mb-4">
-          <span class="cart-total-label">Total</span>
-          <span class="cart-total-value" id="cart-total">0€</span>
+      <div class="row gx-3 align-items-center py-3 border-bottom">
+        <div class="col-auto col-md-1">
+          <img class="cart-thumb" src="../images/art/van_gogh/Cafe_Terrace_at_Night.jpg" alt=""/>
+        </div>
+        <div class="col col-md-5">
+          <h2>Café Terrace at Night</h2>
+        </div>
+        <div class="col-auto col-md-3">
+          <div class="qty-control">
+            <button class="qty-btn">−</button>
+            <input class="qty-num" type="number" min="1" value="1"/>
+            <button class="qty-btn">+</button>
+          </div>
+        </div>
+        <div class="col-auto col-md-2">
+          <h2>950€</h2>
+        </div>
+        <div class="row col-md-1 gap-1">
+          <button class="sm-btn in-cart"><img src="../icons/bag.svg" alt=""/></button>
+          <button class="sm-btn"><img src="../icons/bookmark.svg" alt=""/></button>
+        </div>
+      </div>
+
+      <div class="row gx-3 align-items-center py-3 border-bottom">
+        <div class="col-auto col-md-1">
+          <img class="cart-thumb" src="../images/art/van_gogh/Fishing_in_the_Spring.jpg" alt=""/>
+        </div>
+        <div class="col col-md-5">
+          <h2>Fishing in the Spring</h2>
+        </div>
+        <div class="col-auto col-md-3">
+          <div class="qty-control">
+            <button class="qty-btn">−</button>
+            <input class="qty-num" type="number" min="1" value="1"/>
+            <button class="qty-btn">+</button>
+          </div>
+        </div>
+        <div class="col-auto col-md-2">
+          <h2>880€</h2>
+        </div>
+        <div class="row col-md-1 gap-1">
+          <button class="sm-btn in-cart"><img src="../icons/bag.svg" alt=""/></button>
+          <button class="sm-btn"><img src="../icons/bookmark.svg" alt=""/></button>
+        </div>
+      </div>
+
+      <div class="row gx-3 align-items-center py-3 border-bottom">
+        <div class="col-auto col-md-1">
+          <img class="cart-thumb" src="../images/art/van_gogh/Fritillaries_in_a_Copper_Vase.jpg" alt=""/>
+        </div>
+        <div class="col col-md-5">
+          <h2>Fritillaries in a Copper Vase</h2>
+        </div>
+        <div class="col-auto col-md-3">
+          <div class="qty-control">
+            <button class="qty-btn">−</button>
+            <input class="qty-num" type="number" min="1" value="1"/>
+            <button class="qty-btn">+</button>
+          </div>
+        </div>
+        <div class="col-auto col-md-2">
+          <h2>999€</h2>
+        </div>
+        <div class="row col-md-1 gap-1">
+          <button class="sm-btn in-cart"><img src="../icons/bag.svg" alt=""/></button>
+          <button class="sm-btn"><img src="../icons/bookmark.svg" alt=""/></button>
+        </div>
+      </div>
+
+      <div class="row gx-3 align-items-center py-3">
+        <div class="col-auto col-md-1">
+          <img class="cart-thumb" src="../images/art/van_gogh/Interior_of_a_Restaurant.jpg" alt=""/>
+        </div>
+        <div class="col col-md-5">
+          <h2>Interior of a Restaurant</h2>
+        </div>
+        <div class="col-auto col-md-3">
+          <div class="qty-control">
+            <button class="qty-btn">−</button>
+            <input class="qty-num" type="number" min="1" value="1"/>
+            <button class="qty-btn">+</button>
+          </div>
+        </div>
+        <div class="col-auto col-md-2">
+          <h2>870€</h2>
+        </div>
+        <div class="row col-md-1 gap-1">
+          <button class="sm-btn in-cart"><img src="../icons/bag.svg" alt=""/></button>
+          <button class="sm-btn"><img src="../icons/bookmark.svg" alt=""/></button>
+        </div>
+      </div>
+
+      <div class="mt-4 border-top pt-3">
+        <div class="d-flex justify-content-end mb-4 mt-1">
+          <span style="font-size:22px;font-weight:500;font-family:var(--font-display)">4 579€</span>
         </div>
         <div class="d-flex justify-content-end">
           <a class="order-btn" href="shipping.html">Continue to shipping</a>
         </div>
       </div>
-    </div>
-
-    <div id="cart-empty" class="empty-state" style="display:none">
-      <p>Your cart is empty.</p>
-      <a class="order-btn" href="artworks.html">Browse artworks</a>
-    </div>
-  </main>
-</div>
-
-<!-- Footer -->
-<footer class="d-flex align-items-center gap-3 py-3 border-top" style="background:var(--card-bg); padding-left:1.5rem; padding-right:1.5rem">
-  <div class="d-flex gap-3">
-    <a href="#" class="opacity-50"><img src="../icons/twitter.svg" alt="Twitter" style="width:15px; height:15px"/></a>
-    <a href="#" class="opacity-50"><img src="../icons/instagram.svg" alt="Instagram" style="width:15px; height:15px"/></a>
-    <a href="#" class="opacity-50"><img src="../icons/youtube.svg" alt="YouTube" style="width:15px; height:15px"/></a>
-    <a href="#" class="opacity-50"><img src="../icons/linkedin.svg" alt="LinkedIn" style="width:15px; height:15px"/></a>
+    </main>
   </div>
-  <p class="mb-0 text-muted small">© 2026 DSgallery. All rights reserved.</p>
-</footer>
 
-<script>
-  const CART_ITEMS = [
-    { id: 1, name: 'Bridges Across the Seine at Asnières', img: '../images/art/van_gogh/Bridges_across_the_Seine_at_Asnieres.jpg', unitPrice: 879, qty: 1 },
-    { id: 2, name: 'Café Terrace at Night',                img: '../images/art/van_gogh/Cafe_Terrace_at_Night.jpg',               unitPrice: 950, qty: 1 },
-    { id: 3, name: 'Fishing in the Spring',                img: '../images/art/van_gogh/Fishing_in_the_Spring.jpg',               unitPrice: 880, qty: 1 },
-    { id: 4, name: 'Fritillaries in a Copper Vase',        img: '../images/art/van_gogh/Fritillaries_in_a_Copper_Vase.jpg',       unitPrice: 1000, qty: 1 },
-    { id: 5, name: 'Interior of a Restaurant',             img: '../images/art/van_gogh/Interior_of_a_Restaurant.jpg',            unitPrice: 870, qty: 1 },
-  ];
+  <!-- Footer -->
+  <footer class="d-flex align-items-center gap-3 py-3 border-top" style="background:var(--card-bg); padding-left:1.5rem; padding-right:1.5rem">
+    <div class="d-flex gap-3">
+      <a href="#" class="opacity-50"><img src="../icons/twitter.svg" alt="Twitter" style="width:15px; height:15px"/></a>
+      <a href="#" class="opacity-50"><img src="../icons/instagram.svg" alt="Instagram" style="width:15px; height:15px"/></a>
+      <a href="#" class="opacity-50"><img src="../icons/youtube.svg" alt="YouTube" style="width:15px; height:15px"/></a>
+      <a href="#" class="opacity-50"><img src="../icons/linkedin.svg" alt="LinkedIn" style="width:15px; height:15px"/></a>
+    </div>
+    <p class="mb-0 text-muted small">© 2026 DSgallery. All rights reserved.</p>
+  </footer>
 
-  let items = [...CART_ITEMS];
-
-  function render() {
-    const tbody = document.getElementById('cart-rows');
-    tbody.innerHTML = '';
-
-    if (items.length === 0) {
-      document.getElementById('cart-body').style.display = 'none';
-      document.getElementById('cart-empty').style.display = 'block';
-      return;
-    }
-
-    document.getElementById('cart-body').style.display = 'block';
-    document.getElementById('cart-empty').style.display = 'none';
-
-    let total = 0;
-
-    items.forEach((item, i) => {
-      const lineTotal = item.unitPrice * item.qty;
-      total += lineTotal;
-
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-          <td>
-            <img class="cart-thumb" src="${item.img}" alt="${item.name}" onerror="this.style.background='var(--card-bg)'"/>
-          </td>
-          <td>
-            <div class="cart-name">${item.name}</div>
-          </td>
-          <td>
-            <div class="qty-control">
-              <button class="qty-btn" onclick="changeQty(${i}, -1)">−</button>
-              <input class="qty-num" type="number" min="1" value="${item.qty}" onchange="setQty(${i}, this.value)"/>
-              <button class="qty-btn" onclick="changeQty(${i}, 1)">+</button>
-            </div>
-          </td>
-          <td class="cart-price">${lineTotal.toLocaleString()}€</td>
-          <td>
-            <button class="del-btn" onclick="removeItem(${i})" title="Remove">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
-                <path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
-              </svg>
-            </button>
-          </td>
-        `;
-      tbody.appendChild(tr);
-    });
-
-    document.getElementById('cart-total').textContent = total.toLocaleString() + '€';
-  }
-
-  function changeQty(i, delta) {
-    items[i].qty = Math.max(1, items[i].qty + delta);
-    render();
-  }
-  function setQty(i, val) {
-    items[i].qty = Math.max(1, parseInt(val) || 1);
-    render();
-  }
-  function removeItem(i) {
-    items.splice(i, 1);
-    render();
-  }
-
-  render();
-</script>
 
 </body>
 </html>
