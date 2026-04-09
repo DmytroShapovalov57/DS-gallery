@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DSgallery: login</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
+</head>
+<body class="d-flex flex-column" style="min-height:100vh">
+
+  <!-- Header -->
+  <nav class="navbar px-4 py-2 border-bottom sticky-top bg-white d-flex justify-content-between">
+    <a href="{{ route('home') }}"><img src="{{ asset('images/home/logo.png') }}" alt="DSgallery" style="max-height:40px"/></a>
+    <div class="d-flex align-items-center gap-2">
+      <div class="search-wrap">
+        <input type="text" placeholder="Search"/>
+        <img class="icon-search" src="{{ asset('icons/search.svg') }}" alt=""/>
+      </div>
+      <a class="mid-icon-btn" href="{{ route('cart') }}"><img src="{{ asset('icons/cart.svg') }}" alt="Cart"/></a>
+      <a class="mid-icon-btn" href="{{ route('saved') }}"><img src="{{ asset('icons/bookmark.svg') }}" alt="Saved"/></a>
+      <a class="mid-btn active" href="{{ route('login') }}">Log in</a>
+      <a class="mid-btn" href="{{ route('register') }}">Register</a>
+    </div>
+  </nav>
+
+  <!-- Body -->
+  <div class="d-flex flex-grow-1">
+
+    <!-- Sidebar -->
+    <aside>
+      <nav>
+        <a class="side-link" href="{{ route('home') }}">Home</a>
+        <a class="side-link" href="{{ route('artworks') }}">Artworks</a>
+      </nav>
+    </aside>
+
+    <!-- Login -->
+    <main class="d-flex justify-content-center p-4 flex-grow-1">
+      <div style="width:100%;max-width:400px">
+
+        <h1 class="mb-3">Log in</h1>
+
+        <form method="POST" action="{{ route('login') }}">
+          @csrf
+
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Email</label>
+            <input class="form-control" type="email" name="email" placeholder="your@email.com" value="{{ old('email') }}"/>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Password</label>
+            <input class="form-control" type="password" name="password" placeholder="••••••••"/>
+          </div>
+
+          @if ($errors->any())
+            <div class="alert alert-danger py-2 mb-3" style="font-size:13px">
+              {{ $errors->first() }}
+            </div>
+          @endif
+
+          <button type="submit" class="btn btn-dark w-100 mb-3">Log in</button>
+        </form>
+
+        <p class="text-center text-muted small">Don't have an account?
+          <a href="{{ route('register') }}" class="text-dark fw-semibold text-decoration-none">Register</a>
+        </p>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="d-flex align-items-center gap-3 py-3 border-top" style="background:var(--card-bg); padding-left:1.5rem; padding-right:1.5rem">
+    <div class="d-flex gap-3">
+      <a href="#" class="opacity-50"><img src="{{ asset('icons/twitter.svg') }}" alt="Twitter" style="width:15px; height:15px"/></a>
+      <a href="#" class="opacity-50"><img src="{{ asset('icons/instagram.svg') }}" alt="Instagram" style="width:15px; height:15px"/></a>
+      <a href="#" class="opacity-50"><img src="{{ asset('icons/youtube.svg') }}" alt="YouTube" style="width:15px; height:15px"/></a>
+      <a href="#" class="opacity-50"><img src="{{ asset('icons/linkedin.svg') }}" alt="LinkedIn" style="width:15px; height:15px"/></a>
+    </div>
+    <p class="mb-0 text-muted small">© 2026 DSgallery. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
