@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // ── Show forms ────────────────────────────────────────────────────
+    // <!-- Show -->
     public function showLogin()
     {
         return Auth::check() ? redirect('/') : view('login');
@@ -20,7 +20,7 @@ class AuthController extends Controller
         return Auth::check() ? redirect('/') : view('register');
     }
 
-    // ── Login ─────────────────────────────────────────────────────────
+    // <!-- Login -->
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -39,7 +39,7 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    // ── Register ──────────────────────────────────────────────────────
+    // <!-- Register -->
     public function register(Request $request)
     {
         $request->validate([
@@ -61,7 +61,7 @@ class AuthController extends Controller
         return redirect('/');
     }
 
-    // ── Logout ────────────────────────────────────────────────────────
+    // <!-- Logout -->
     public function logout(Request $request)
     {
         Auth::logout();
