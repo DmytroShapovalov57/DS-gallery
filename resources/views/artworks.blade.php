@@ -1,260 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DSgallery: artworks</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
-  <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>DSgallery: artworks</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
 </head>
 <body class="d-flex flex-column" style="min-height:100vh">
 
-  <!-- Header -->
-  <nav class="navbar px-4 py-2 border-bottom sticky-top bg-white d-flex justify-content-between">
+<!-- Header -->
+<nav class="navbar px-4 py-2 border-bottom sticky-top bg-white d-flex justify-content-between">
     <a href="{{ route('home') }}"><img src="{{ asset('images/home/logo.png') }}" alt="DSgallery" style="max-height:40px"/></a>
     <div class="d-flex align-items-center gap-2">
-      <div class="search-wrap">
-        <input type="text" placeholder="Search"/>
-        <img class="icon-search" src="{{ asset('icons/search.svg') }}" alt=""/>
-      </div>
-      <a class="mid-icon-btn" href="{{ route('cart') }}"><img src="{{ asset('icons/cart.svg') }}" alt="Cart"/></a>
-      <a class="mid-icon-btn" href="{{ route('saved') }}"><img src="{{ asset('icons/bookmark.svg') }}" alt="Saved"/></a>
-      <a class="mid-btn" href="{{ route('login') }}">Log in</a>
-      <a class="mid-btn" href="{{ route('register') }}">Register</a>
+        <div class="search-wrap">
+            <input type="text" placeholder="Search"/>
+            <img class="icon-search" src="{{ asset('icons/search.svg') }}" alt=""/>
+        </div>
+        <a class="mid-icon-btn" href="{{ route('cart') }}"><img src="{{ asset('icons/cart.svg') }}" alt="Cart"/></a>
+        <a class="mid-icon-btn" href="{{ route('saved') }}"><img src="{{ asset('icons/bookmark.svg') }}" alt="Saved"/></a>
+        @auth
+            <span class="mid-btn" style="pointer-events:none">{{ Auth::user()->name }}</span>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="mid-btn">Log out</button>
+            </form>
+        @else
+            <a class="mid-btn" href="{{ route('login') }}">Log in</a>
+            <a class="mid-btn" href="{{ route('register') }}">Register</a>
+        @endauth
     </div>
-  </nav>
+</nav>
 
-  <!-- Body -->
-  <div class="d-flex flex-grow-1 ">
+<!-- Body -->
+<div class="d-flex flex-grow-1 ">
 
     <!-- Sidebar -->
     <aside>
-      <nav>
-        <a class="side-link" href="{{ route('home') }}">Home</a>
-        <a class="side-link active" href="{{ route('admin.artworks') }}">Artworks</a>
-      </nav>
+        <nav>
+            <a class="side-link" href="{{ route('home') }}">Home</a>
+            <a class="side-link active" href="{{ route('artworks') }}">Artworks</a>
+        </nav>
     </aside>
 
     <!-- Artworks -->
     <div class="d-flex flex-grow-1">
 
-      <!-- Filter panel -->
-      <div class="d-flex flex-column flex-md-row flex-grow-1">
-        <div class="filter-panel w-100 w-md-auto">
+        <!-- Filter panel -->
+        <div class="d-flex flex-column flex-md-row flex-grow-1">
+            <div class="filter-panel w-100 w-md-auto">
 
-          <p class="muted-label">SORT BY</p>
-          <select class="form-select" style="font-size:13px">
-            <option>Price</option>
-            <option>Year</option>
-            <option>Name</option>
-          </select>
+                <p class="muted-label">SORT BY</p>
+                <select class="form-select" style="font-size:13px">
+                    <option>Price</option>
+                    <option>Year</option>
+                    <option>Name</option>
+                </select>
 
-          <p class="muted-label">PRICE</p>
-          <div class="d-flex justify-content-between" style="font-size:11px; color:var(--muted)">
-            <span>0€</span>
-            <span>1000€</span>
-          </div>
+                <p class="muted-label">PRICE</p>
+                <div class="d-flex justify-content-between" style="font-size:11px; color:var(--muted)">
+                    <span>0€</span>
+                    <span>1000€</span>
+                </div>
 
-          <input type="range" min="0" max="1000" value="1000" class="w-100"/>
+                <input type="range" min="0" max="1000" value="1000" class="w-100"/>
 
-          <p class="muted-label">YEAR</p>
-          <div class="d-flex justify-content-between" style="font-size:11px;color:var(--muted)">
-            <span>1200</span>
-            <span>2026</span>
-          </div>
-          <input type="range" min="1200" max="2026" value="2026" class="w-100"/>
+                <p class="muted-label">YEAR</p>
+                <div class="d-flex justify-content-between" style="font-size:11px;color:var(--muted)">
+                    <span>1200</span>
+                    <span>2026</span>
+                </div>
+                <input type="range" min="1200" max="2026" value="2026" class="w-100"/>
 
-          <p class="muted-label">GENRE</p>
-          <div class="filter-check">
-            <label><input type="checkbox" checked/>Impressionism</label>
-            <label><input type="checkbox" checked/>Renaissance</label>
-            <label><input type="checkbox" checked/>Abstract</label>
-          </div>
+                <p class="muted-label">GENRE</p>
+                <div class="filter-check">
+                    <label><input type="checkbox" checked/>Impressionism</label>
+                    <label><input type="checkbox" checked/>Renaissance</label>
+                    <label><input type="checkbox" checked/>Abstract</label>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <!-- Product grid -->
-      <div class="mx-auto">
-        <main class="aw-main p-4" style="overflow-y: auto; flex: 1;">
+        <!-- Product grid -->
+        <div class="mx-auto">
+            <main class="aw-main p-4" style="overflow-y: auto; flex: 1;">
 
-          <h1>Artworks</h1>
+                <h1>Artworks</h1>
 
-          <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
 
-            <div class="col">
-              <figure class="card p-0">
-                <a class="img-card" style="height:300px" href="{{ route('detail') }}">
-                  <img class="art-image" src="{{ asset('images/art/van_gogh/Bridges_across_the_Seine_at_Asnieres.jpg') }}" alt=""/>
-                  <div class="tile-btns">
-                    <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
-                    <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
-                  </div>
-                </a>
-                <div class="tile-info">
-                  <figcaption class="name">Bridges Across the Seine at Asnières</figcaption>
-                  <div class="price">879€</div>
+                    <div class="col">
+                        <figure class="card p-0">
+                            <a class="img-card" style="height:300px" href="{{ route('detail') }}">
+                                <img class="art-image" src="{{ asset('images/art/van_gogh/Bridges_across_the_Seine_at_Asnieres.jpg') }}" alt=""/>
+                                <div class="tile-btns">
+                                    <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
+                                    <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
+                                </div>
+                            </a>
+                            <div class="tile-info">
+                                <figcaption class="name">Bridges Across the Seine at Asnières</figcaption>
+                                <div class="price">879€</div>
+                            </div>
+                        </figure>
+                    </div>
+
+                    <div class="col">
+                        <figure class="card p-0">
+                            <a class="img-card" style="height:300px" href="{{ route('detail') }}">
+                                <img class="art-image" src="{{ asset('images/art/van_gogh/Cafe_Terrace_at_Night.jpg') }}" alt=""/>
+                                <div class="tile-btns">
+                                    <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
+                                    <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
+                                </div>
+                            </a>
+                            <div class="tile-info">
+                                <figcaption class="name">Café Terrace at Night</figcaption>
+                                <div class="price">950€</div>
+                            </div>
+                        </figure>
+                    </div>
+
+                    <div class="col">
+                        <figure class="card p-0">
+                            <a class="img-card" style="height:300px" href="{{ route('detail') }}">
+                                <img class="art-image" src="{{ asset('images/art/van_gogh/Fishing_in_the_Spring.jpg') }}" alt=""/>
+                                <div class="tile-btns">
+                                    <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
+                                    <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
+                                </div>
+                            </a>
+                            <div class="tile-info">
+                                <figcaption class="name">Fishing in the Spring</figcaption>
+                                <div class="price">880€</div>
+                            </div>
+                        </figure>
+                    </div>
+
+                    <div class="col">
+                        <figure class="card p-0">
+                            <a class="img-card" style="height:300px" href="{{ route('detail') }}">
+                                <img class="art-image" src="{{ asset('images/art/van_gogh/Fritillaries_in_a_Copper_Vase.jpg') }}" alt=""/>
+                                <div class="tile-btns">
+                                    <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
+                                    <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
+                                </div>
+                            </a>
+                            <div class="tile-info">
+                                <figcaption class="name">Fritillaries in a Copper Vase</figcaption>
+                                <div class="price">999€</div>
+                            </div>
+                        </figure>
+                    </div>
+
+                    <div class="col">
+                        <figure class="card p-0">
+                            <a class="img-card" style="height:300px" href="{{ route('detail') }}">
+                                <img class="art-image" src="{{ asset('images/art/van_gogh/Interior_of_a_Restaurant.jpg') }}" alt=""/>
+                                <div class="tile-btns">
+                                    <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
+                                    <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
+                                </div>
+                            </a>
+                            <div class="tile-info">
+                                <figcaption class="name">Interior of a Restaurant</figcaption>
+                                <div class="price">870€</div>
+                            </div>
+                        </figure>
+                    </div>
+
+                    <div class="col">
+                        <figure class="card p-0">
+                            <a class="img-card" style="height:300px" href="{{ route('detail') }}">
+                                <img class="art-image" src="{{ asset('images/art/van_gogh/Irises.jpg') }}" alt=""/>
+                                <div class="tile-btns">
+                                    <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
+                                    <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
+                                </div>
+                            </a>
+                            <div class="tile-info">
+                                <figcaption class="name">Irises</figcaption>
+                                <div class="price">990€</div>
+                            </div>
+                        </figure>
+                    </div>
+
+                    <div class="col">
+                        <figure class="card p-0">
+                            <a class="img-card" style="height:300px" href="{{ route('detail') }}">
+                                <img class="art-image" src="{{ asset('images/art/van_gogh/Landscape_with_House_and_Ploughman.jpg') }}" alt=""/>
+                                <div class="tile-btns">
+                                    <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
+                                    <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
+                                </div>
+                            </a>
+                            <div class="tile-info">
+                                <figcaption class="name">Landscape with House and Ploughman</figcaption>
+                                <div class="price">1000€</div>
+                            </div>
+                        </figure>
+                    </div>
+
+                    <div class="col">
+                        <figure class="card p-0">
+                            <a class="img-card" style="height:300px" href="{{ route('detail') }}">
+                                <img class="art-image" src="{{ asset('images/art/van_gogh/Red_Vineyards_at_Arles.jpg') }}" alt=""/>
+                                <div class="tile-btns">
+                                    <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
+                                    <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
+                                </div>
+                            </a>
+                            <div class="tile-info">
+                                <figcaption class="name">Red Vineyards at Arles</figcaption>
+                                <div class="price">950€</div>
+                            </div>
+                        </figure>
+                    </div>
+
+                    <div class="col">
+                        <figure class="card p-0">
+                            <a class="img-card" style="height:300px" href="{{ route('detail') }}">
+                                <img class="art-image" src="{{ asset('images/art/van_gogh/Skull_with_burning_cigarette.jpg') }}" alt=""/>
+                                <div class="tile-btns">
+                                    <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
+                                    <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
+                                </div>
+                            </a>
+                            <div class="tile-info">
+                                <figcaption class="name">Skull with Burning Cigarette</figcaption>
+                                <div class="price">980€</div>
+                            </div>
+                        </figure>
+                    </div>
+
                 </div>
-              </figure>
-            </div>
 
-            <div class="col">
-              <figure class="card p-0">
-                <a class="img-card" style="height:300px" href="{{ route('detail') }}">
-                  <img class="art-image" src="{{ asset('images/art/van_gogh/Cafe_Terrace_at_Night.jpg') }}" alt=""/>
-                  <div class="tile-btns">
-                    <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
-                    <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
-                  </div>
-                </a>
-                <div class="tile-info">
-                  <figcaption class="name">Café Terrace at Night</figcaption>
-                  <div class="price">950€</div>
-                </div>
-              </figure>
-            </div>
+                <!-- Pagination -->
+                <nav class="d-flex justify-content-center mt-4">
+                    <ul class="pagination">
+                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
 
-            <div class="col">
-              <figure class="card p-0">
-                <a class="img-card" style="height:300px" href="{{ route('detail') }}">
-                  <img class="art-image" src="{{ asset('images/art/van_gogh/Fishing_in_the_Spring.jpg') }}" alt=""/>
-                  <div class="tile-btns">
-                    <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
-                    <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
-                  </div>
-                </a>
-                <div class="tile-info">
-                  <figcaption class="name">Fishing in the Spring</figcaption>
-                  <div class="price">880€</div>
-                </div>
-              </figure>
-            </div>
-
-            <div class="col">
-              <figure class="card p-0">
-                <a class="img-card" style="height:300px" href="{{ route('detail') }}">
-                  <img class="art-image" src="{{ asset('images/art/van_gogh/Fritillaries_in_a_Copper_Vase.jpg') }}" alt=""/>
-                  <div class="tile-btns">
-                    <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
-                    <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
-                  </div>
-                </a>
-                <div class="tile-info">
-                  <figcaption class="name">Fritillaries in a Copper Vase</figcaption>
-                  <div class="price">999€</div>
-                </div>
-              </figure>
-            </div>
-
-            <div class="col">
-              <figure class="card p-0">
-                <a class="img-card" style="height:300px" href="{{ route('detail') }}">
-                  <img class="art-image" src="{{ asset('images/art/van_gogh/Interior_of_a_Restaurant.jpg') }}" alt=""/>
-                  <div class="tile-btns">
-                    <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
-                    <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
-                  </div>
-                </a>
-                <div class="tile-info">
-                  <figcaption class="name">Interior of a Restaurant</figcaption>
-                  <div class="price">870€</div>
-                </div>
-              </figure>
-            </div>
-
-            <div class="col">
-              <figure class="card p-0">
-                <a class="img-card" style="height:300px" href="{{ route('detail') }}">
-                  <img class="art-image" src="{{ asset('images/art/van_gogh/Irises.jpg') }}" alt=""/>
-                  <div class="tile-btns">
-                    <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
-                    <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
-                  </div>
-                </a>
-                <div class="tile-info">
-                  <figcaption class="name">Irises</figcaption>
-                  <div class="price">990€</div>
-                </div>
-              </figure>
-            </div>
-
-            <div class="col">
-              <figure class="card p-0">
-                <a class="img-card" style="height:300px" href="{{ route('detail') }}">
-                  <img class="art-image" src="{{ asset('images/art/van_gogh/Landscape_with_House_and_Ploughman.jpg') }}" alt=""/>
-                  <div class="tile-btns">
-                    <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
-                    <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
-                  </div>
-                </a>
-                <div class="tile-info">
-                  <figcaption class="name">Landscape with House and Ploughman</figcaption>
-                  <div class="price">1000€</div>
-                </div>
-              </figure>
-            </div>
-
-            <div class="col">
-              <figure class="card p-0">
-                <a class="img-card" style="height:300px" href="{{ route('detail') }}">
-                  <img class="art-image" src="{{ asset('images/art/van_gogh/Red_Vineyards_at_Arles.jpg') }}" alt=""/>
-                  <div class="tile-btns">
-                    <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
-                    <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
-                  </div>
-                </a>
-                <div class="tile-info">
-                  <figcaption class="name">Red Vineyards at Arles</figcaption>
-                  <div class="price">950€</div>
-                </div>
-              </figure>
-            </div>
-
-            <div class="col">
-              <figure class="card p-0">
-                <a class="img-card" style="height:300px" href="{{ route('detail') }}">
-                  <img class="art-image" src="{{ asset('images/art/van_gogh/Skull_with_burning_cigarette.jpg') }}" alt=""/>
-                  <div class="tile-btns">
-                    <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
-                    <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
-                  </div>
-                </a>
-                <div class="tile-info">
-                  <figcaption class="name">Skull with Burning Cigarette</figcaption>
-                  <div class="price">980€</div>
-                </div>
-              </figure>
-            </div>
-
-          </div>
-
-          <!-- Pagination -->
-          <nav class="d-flex justify-content-center mt-4">
-            <ul class="pagination">
-              <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-              <li class="page-item active"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item"><a class="page-link" href="#">Next</a></li>
-            </ul>
-          </nav>
-
-        </main>
-      </div>
+            </main>
+        </div>
 
     </div>
 
-  </div>
+</div>
 
-  <!-- Footer -->
-  <footer class="d-flex align-items-center gap-3 py-3 border-top" style="background:var(--card-bg); padding-left:1.5rem; padding-right:1.5rem">
+<!-- Footer -->
+<footer class="d-flex align-items-center gap-3 py-3 border-top" style="background:var(--card-bg); padding-left:1.5rem; padding-right:1.5rem">
     <div class="d-flex gap-3">
-      <a href="#" class="opacity-50"><img src="{{ asset('icons/twitter.svg') }}" alt="Twitter" style="width:15px; height:15px"/></a>
-      <a href="#" class="opacity-50"><img src="{{ asset('icons/instagram.svg') }}" alt="Instagram" style="width:15px; height:15px"/></a>
-      <a href="#" class="opacity-50"><img src="{{ asset('icons/youtube.svg') }}" alt="YouTube" style="width:15px; height:15px"/></a>
-      <a href="#" class="opacity-50"><img src="{{ asset('icons/linkedin.svg') }}" alt="LinkedIn" style="width:15px; height:15px"/></a>
+        <a href="#" class="opacity-50"><img src="{{ asset('icons/twitter.svg') }}" alt="Twitter" style="width:15px; height:15px"/></a>
+        <a href="#" class="opacity-50"><img src="{{ asset('icons/instagram.svg') }}" alt="Instagram" style="width:15px; height:15px"/></a>
+        <a href="#" class="opacity-50"><img src="{{ asset('icons/youtube.svg') }}" alt="YouTube" style="width:15px; height:15px"/></a>
+        <a href="#" class="opacity-50"><img src="{{ asset('icons/linkedin.svg') }}" alt="LinkedIn" style="width:15px; height:15px"/></a>
     </div>
     <p class="mb-0 text-muted small">© 2026 DSgallery. All rights reserved.</p>
-  </footer>
+</footer>
 
 </body>
 </html>

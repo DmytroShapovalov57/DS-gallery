@@ -1,192 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DSgallery: home</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
-  <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>DSgallery: home</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
 </head>
 <body class="d-flex flex-column" style="min-height:100vh">
 
-  <!-- Header -->
-  <nav class="navbar px-4 py-2 border-bottom sticky-top bg-white d-flex justify-content-between">
+<!-- Header -->
+<nav class="navbar px-4 py-2 border-bottom sticky-top bg-white d-flex justify-content-between">
     <a href="{{ route('home') }}"><img src="{{ asset('images/home/logo.png') }}" alt="DSgallery" style="max-height:40px"/></a>
     <div class="d-flex align-items-center gap-2">
-      <div class="search-wrap">
-        <input type="text" placeholder="Search"/>
-        <img class="icon-search" src="{{ asset('icons/search.svg') }}" alt=""/>
-      </div>
-      <a class="mid-icon-btn" href="{{ route('cart') }}"><img src="{{ asset('icons/cart.svg') }}" alt="Cart"/></a>
-      <a class="mid-icon-btn" href="{{ route('saved') }}"><img src="{{ asset('icons/bookmark.svg') }}" alt="Saved"/></a>
-      <a class="mid-btn" href="{{ route('login') }}">Log in</a>
-      <a class="mid-btn" href="{{ route('register') }}">Register</a>
+        <div class="search-wrap">
+            <input type="text" placeholder="Search"/>
+            <img class="icon-search" src="{{ asset('icons/search.svg') }}" alt=""/>
+        </div>
+        <a class="mid-icon-btn" href="{{ route('cart') }}"><img src="{{ asset('icons/cart.svg') }}" alt="Cart"/></a>
+        <a class="mid-icon-btn" href="{{ route('saved') }}"><img src="{{ asset('icons/bookmark.svg') }}" alt="Saved"/></a>
+        @auth
+            <span class="mid-btn" style="pointer-events:none">{{ Auth::user()->name }}</span>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="mid-btn">Log out</button>
+            </form>
+        @else
+            <a class="mid-btn" href="{{ route('login') }}">Log in</a>
+            <a class="mid-btn" href="{{ route('register') }}">Register</a>
+        @endauth
     </div>
-  </nav>
+</nav>
 
-  <!-- Body -->
-  <div class="d-flex flex-grow-1">
+<!-- Body -->
+<div class="d-flex flex-grow-1">
 
     <!-- Sidebar -->
     <aside>
-      <nav>
-        <a class="side-link active" href="{{ route('home') }}">Home</a>
-        <a class="side-link" href="{{ route('artworks') }}">Artworks</a>
-      </nav>
+        <nav>
+            <a class="side-link active" href="{{ route('home') }}">Home</a>
+            <a class="side-link" href="{{ route('artworks') }}">Artworks</a>
+        </nav>
     </aside>
 
     <!-- Homepage -->
     <main class="p-4 overflow-y-auto flex-grow-1">
 
-      <section class="mb-5">
-        <h1>News from the world of art</h1>
-        <article class="news-card border rounded-1 p-4">
-          <div>
-            <h2 style="font-size:20px; font-weight:500; margin-bottom:14px; line-height:1.4">Jeff Koons's Giant Play-Doh Sculpture Could Fetch 20€ Million at Christie's.</h2>
-            <p style="font-size:16px; line-height:1.75">When the Whitney Museum of American Art staged its blockbuster retrospective of Jeff Koons in 2014, the most photographed work was undeniably Play-Doh (1994–2014), an 11-foot-tall aluminum sculpture that looked as if an artistic young giant had created a multicolored pile of clay and then left it behind.<br><br>
-              Now, a version of that candy-hued work is heading to auction. Christie's will offer an edition of Play-Doh at its evening sale of postwar and contemporary art in New York on May 17. The work, consigned from a European collection, is expected to sell for a price "in the region of 20€ million." This marks the first time that a Play-Doh sculpture, one of five unique versions from the artist's notoriously ambitious and pricey "Celebration" series, has come up for auction.<br><br>
-              By the time Koons finally revealed Play-Doh to the public in his Whitney retrospective, it was already the stuff of legend. The work took around two decades to produce as the notoriously perfectionist Koons fiddled with the medium and refined the production process.
-            </p>
-          </div>
-          <div class="img-card news-img"><img class="art-image" src="{{ asset('images/home/news.jpg') }}" alt=""/></div>
-        </article>
-      </section>
+        <section class="mb-5">
+            <h1>News from the world of art</h1>
+            <article class="news-card border rounded-1 p-4">
+                <div>
+                    <h2 style="font-size:20px; font-weight:500; margin-bottom:14px; line-height:1.4">Jeff Koons's Giant Play-Doh Sculpture Could Fetch 20€ Million at Christie's.</h2>
+                    <p style="font-size:16px; line-height:1.75">When the Whitney Museum of American Art staged its blockbuster retrospective of Jeff Koons in 2014, the most photographed work was undeniably Play-Doh (1994–2014), an 11-foot-tall aluminum sculpture that looked as if an artistic young giant had created a multicolored pile of clay and then left it behind.<br><br>
+                        Now, a version of that candy-hued work is heading to auction. Christie's will offer an edition of Play-Doh at its evening sale of postwar and contemporary art in New York on May 17. The work, consigned from a European collection, is expected to sell for a price "in the region of 20€ million." This marks the first time that a Play-Doh sculpture, one of five unique versions from the artist's notoriously ambitious and pricey "Celebration" series, has come up for auction.<br><br>
+                        By the time Koons finally revealed Play-Doh to the public in his Whitney retrospective, it was already the stuff of legend. The work took around two decades to produce as the notoriously perfectionist Koons fiddled with the medium and refined the production process.
+                    </p>
+                </div>
+                <div class="img-card news-img"><img class="art-image" src="{{ asset('images/home/news.jpg') }}" alt=""/></div>
+            </article>
+        </section>
 
-      <section class="mb-5">
-        <h1>Artwork of the day</h1>
-
-        <a class="day-wrap" href="{{ route('detail') }}">
-          <img src="{{ asset('images/home/Girl_with_a_Pearl_Earring.jpg') }}" alt="Girl with a Pearl Earring"/>
-          <div class="tile-btns">
-            <div class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></div>
-            <div class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></div>
-          </div>
-        </a>
-      </section>
-
-      <section class="mb-5">
-        <h1>New Arrivals</h1>
-
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
-
-          <div class="col">
-            <figure class="card p-0">
-              <a class="img-card" style="height:300px" href="{{ route('detail') }}">
-                <img class="art-image" src="{{ asset('images/art/van_gogh/Bridges_across_the_Seine_at_Asnieres.jpg') }}" alt=""/>
+        <section class="mb-5">
+            <h1>Artwork of the day</h1>
+            <a class="day-wrap" href="{{ route('detail') }}">
+                <img src="{{ asset('images/home/Girl_with_a_Pearl_Earring.jpg') }}" alt="Girl with a Pearl Earring"/>
                 <div class="tile-btns">
-                  <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
-                  <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
+                    <div class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></div>
+                    <div class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></div>
                 </div>
-              </a>
-              <div class="tile-info">
-                <figcaption class="name">Bridges Across the Seine at Asnières</figcaption>
-                <div class="price">879€</div>
-              </div>
-            </figure>
-          </div>
+            </a>
+        </section>
 
-          <div class="col">
-            <figure class="card p-0">
-              <a class="img-card" style="height:300px" href="{{ route('detail') }}">
-                <img class="art-image" src="{{ asset('images/art/van_gogh/Cafe_Terrace_at_Night.jpg') }}" alt=""/>
-                <div class="tile-btns">
-                  <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
-                  <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
+        <section class="mb-5">
+            <h1>New Arrivals</h1>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+
+                <div class="col">
+                    <figure class="card p-0">
+                        <a class="img-card" style="height:300px" href="{{ route('detail') }}">
+                            <img class="art-image" src="{{ asset('images/art/van_gogh/Bridges_across_the_Seine_at_Asnieres.jpg') }}" alt=""/>
+                            <div class="tile-btns">
+                                <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
+                                <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
+                            </div>
+                        </a>
+                        <div class="tile-info">
+                            <figcaption class="name">Bridges Across the Seine at Asnières</figcaption>
+                            <div class="price">879€</div>
+                        </div>
+                    </figure>
                 </div>
-              </a>
-              <div class="tile-info">
-                <figcaption class="name">Café Terrace at Night</figcaption>
-                <div class="price">950€</div>
-              </div>
-            </figure>
-          </div>
 
-          <div class="col">
-            <figure class="card p-0">
-              <a class="img-card" style="height:300px" href="{{ route('detail') }}">
-                <img class="art-image" src="{{ asset('images/art/van_gogh/Fishing_in_the_Spring.jpg') }}" alt=""/>
-                <div class="tile-btns">
-                  <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
-                  <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
+                <div class="col">
+                    <figure class="card p-0">
+                        <a class="img-card" style="height:300px" href="{{ route('detail') }}">
+                            <img class="art-image" src="{{ asset('images/art/van_gogh/Cafe_Terrace_at_Night.jpg') }}" alt=""/>
+                            <div class="tile-btns">
+                                <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
+                                <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
+                            </div>
+                        </a>
+                        <div class="tile-info">
+                            <figcaption class="name">Café Terrace at Night</figcaption>
+                            <div class="price">950€</div>
+                        </div>
+                    </figure>
                 </div>
-              </a>
-              <div class="tile-info">
-                <figcaption class="name">Fishing in the Spring</figcaption>
-                <div class="price">880€</div>
-              </div>
-            </figure>
-          </div>
 
-        </div>
-      </section>
-
-      <section>
-        <h1>Our most famous artists</h1>
-
-        <div class="d-flex flex-column">
-
-          <article class="border-top py-4">
-            <div class="row g-4">
-              <div class="col-12 col-md-7">
-                <p style="font-size:18px">
-                  Vincent van Gogh (1853–1890) — a Dutch Post-Impressionist painter whose work marked a dramatic shift toward emotional expression and individuality in art, as he developed a highly distinctive style characterized by bold, vibrant colors, thick brushstrokes, and dynamic movement that conveyed his inner feelings and personal vision of the world, and although he struggled with poverty, isolation, and mental health issues throughout his life, producing more than 2,000 artworks including paintings, drawings, and sketches, he received little recognition during his lifetime, selling only a few works, yet after his death his art gained immense appreciation and became central to the development of modern art, with iconic paintings such as "The Starry Night," "Sunflowers," and "Irises" now considered masterpieces, and today Van Gogh is seen as one of the most influential artists in history, whose legacy continues to inspire artists and audiences around the world.
-                </p>
-              </div>
-              <div class="col-12 col-md-5">
-                <div class="img-card" style="height:350px">
-                  <img class="art-image" src="{{ asset('images/home/Van_Gogh.jpg') }}" alt=""/>
+                <div class="col">
+                    <figure class="card p-0">
+                        <a class="img-card" style="height:300px" href="{{ route('detail') }}">
+                            <img class="art-image" src="{{ asset('images/art/van_gogh/Fishing_in_the_Spring.jpg') }}" alt=""/>
+                            <div class="tile-btns">
+                                <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
+                                <button class="sm-icon-btn"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
+                            </div>
+                        </a>
+                        <div class="tile-info">
+                            <figcaption class="name">Fishing in the Spring</figcaption>
+                            <div class="price">880€</div>
+                        </div>
+                    </figure>
                 </div>
-              </div>
+
             </div>
-          </article>
+        </section>
 
-          <article class="border-top py-4">
-            <div class="row g-4">
-              <div class="col-12 col-md-7">
-                <p style="font-size:18px">
-                  Pablo Picasso (1881–1973) — a Spanish painter, sculptor, and one of the most influential and innovative artists of the 20th century, who fundamentally changed the direction of modern art through his constant experimentation and willingness to challenge traditional artistic conventions, becoming best known for co-founding Cubism, a revolutionary movement that broke objects into geometric shapes and presented multiple perspectives simultaneously, and throughout his extraordinarily productive career he explored a wide range of styles including the melancholic Blue Period, the warmer Rose Period, and later bold and expressive works, with masterpieces such as "Guernica" and "Les Demoiselles d'Avignon" standing out for their emotional intensity and political significance.
-                </p>
-              </div>
-              <div class="col-12 col-md-5">
-                <div class="img-card" style="height:350px">
-                  <img class="art-image" src="{{ asset('images/home/Picasso.jpg') }}" alt=""/>
-                </div>
-              </div>
+        <section>
+            <h1>Our most famous artists</h1>
+            <div class="d-flex flex-column">
+
+                <article class="border-top py-4">
+                    <div class="row g-4">
+                        <div class="col-12 col-md-7">
+                            <p style="font-size:18px">
+                                Vincent van Gogh (1853–1890) — a Dutch Post-Impressionist painter whose work marked a dramatic shift toward emotional expression and individuality in art, as he developed a highly distinctive style characterized by bold, vibrant colors, thick brushstrokes, and dynamic movement that conveyed his inner feelings and personal vision of the world, and although he struggled with poverty, isolation, and mental health issues throughout his life, producing more than 2,000 artworks including paintings, drawings, and sketches, he received little recognition during his lifetime, selling only a few works, yet after his death his art gained immense appreciation and became central to the development of modern art, with iconic paintings such as "The Starry Night," "Sunflowers," and "Irises" now considered masterpieces, and today Van Gogh is seen as one of the most influential artists in history, whose legacy continues to inspire artists and audiences around the world.
+                            </p>
+                        </div>
+                        <div class="col-12 col-md-5">
+                            <div class="img-card" style="height:350px">
+                                <img class="art-image" src="{{ asset('images/home/Van_Gogh.jpg') }}" alt=""/>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="border-top py-4">
+                    <div class="row g-4">
+                        <div class="col-12 col-md-7">
+                            <p style="font-size:18px">
+                                Pablo Picasso (1881–1973) — a Spanish painter, sculptor, and one of the most influential and innovative artists of the 20th century, who fundamentally changed the direction of modern art through his constant experimentation and willingness to challenge traditional artistic conventions, becoming best known for co-founding Cubism, a revolutionary movement that broke objects into geometric shapes and presented multiple perspectives simultaneously, and throughout his extraordinarily productive career he explored a wide range of styles including the melancholic Blue Period, the warmer Rose Period, and later bold and expressive works, with masterpieces such as "Guernica" and "Les Demoiselles d'Avignon" standing out for their emotional intensity and political significance.
+                            </p>
+                        </div>
+                        <div class="col-12 col-md-5">
+                            <div class="img-card" style="height:350px">
+                                <img class="art-image" src="{{ asset('images/home/Picasso.jpg') }}" alt=""/>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="border-top py-4">
+                    <div class="row g-4">
+                        <div class="col-12 col-md-7">
+                            <p style="font-size:18px">
+                                Raphael (1483–1520) — an Italian painter and architect of the High Renaissance, widely regarded as one of the greatest artists in European history, whose work embodies harmony, clarity, and ideal beauty inspired by classical antiquity and humanist philosophy, and he became especially famous for his perfectly balanced compositions, graceful figures, and ability to convey complex ideas through clear and elegant visual language, with masterpieces such as "The School of Athens" and "The Sistine Madonna" demonstrating not only technical brilliance but also intellectual depth, and during his relatively short life he worked in Florence and Rome, gaining recognition from powerful patrons including the papacy.
+                            </p>
+                        </div>
+                        <div class="col-12 col-md-5">
+                            <div class="img-card" style="height:350px">
+                                <img class="art-image" src="{{ asset('images/home/Raphael.jpg') }}" alt=""/>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
             </div>
-          </article>
-
-          <article class="border-top py-4">
-            <div class="row g-4">
-              <div class="col-12 col-md-7">
-                <p style="font-size:18px">
-                  Raphael (1483–1520) — an Italian painter and architect of the High Renaissance, widely regarded as one of the greatest artists in European history, whose work embodies harmony, clarity, and ideal beauty inspired by classical antiquity and humanist philosophy, and he became especially famous for his perfectly balanced compositions, graceful figures, and ability to convey complex ideas through clear and elegant visual language, with masterpieces such as "The School of Athens" and "The Sistine Madonna" demonstrating not only technical brilliance but also intellectual depth, and during his relatively short life he worked in Florence and Rome, gaining recognition from powerful patrons including the papacy.
-                </p>
-              </div>
-              <div class="col-12 col-md-5">
-                <div class="img-card" style="height:350px">
-                  <img class="art-image" src="{{ asset('images/home/Raphael.jpg') }}" alt=""/>
-                </div>
-              </div>
-            </div>
-          </article>
-
-        </div>
-      </section>
+        </section>
 
     </main>
 
-  </div>
+</div>
 
-  <!-- Footer -->
-  <footer class="d-flex align-items-center gap-3 py-3 border-top" style="background:var(--card-bg); padding-left:1.5rem; padding-right:1.5rem">
+<!-- Footer -->
+<footer class="d-flex align-items-center gap-3 py-3 border-top" style="background:var(--card-bg); padding-left:1.5rem; padding-right:1.5rem">
     <div class="d-flex gap-3">
-      <a href="#" class="opacity-50"><img src="{{ asset('icons/twitter.svg') }}" alt="Twitter" style="width:15px; height:15px"/></a>
-      <a href="#" class="opacity-50"><img src="{{ asset('icons/instagram.svg') }}" alt="Instagram" style="width:15px; height:15px"/></a>
-      <a href="#" class="opacity-50"><img src="{{ asset('icons/youtube.svg') }}" alt="YouTube" style="width:15px; height:15px"/></a>
-      <a href="#" class="opacity-50"><img src="{{ asset('icons/linkedin.svg') }}" alt="LinkedIn" style="width:15px; height:15px"/></a>
+        <a href="#" class="opacity-50"><img src="{{ asset('icons/twitter.svg') }}" alt="Twitter" style="width:15px; height:15px"/></a>
+        <a href="#" class="opacity-50"><img src="{{ asset('icons/instagram.svg') }}" alt="Instagram" style="width:15px; height:15px"/></a>
+        <a href="#" class="opacity-50"><img src="{{ asset('icons/youtube.svg') }}" alt="YouTube" style="width:15px; height:15px"/></a>
+        <a href="#" class="opacity-50"><img src="{{ asset('icons/linkedin.svg') }}" alt="LinkedIn" style="width:15px; height:15px"/></a>
     </div>
     <p class="mb-0 text-muted small">© 2026 DSgallery. All rights reserved.</p>
-  </footer>
+</footer>
 
 </body>
 </html>

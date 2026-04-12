@@ -2,23 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
 class AuthController extends Controller
 {
+    // ── Show forms ────────────────────────────────────────────────────
     public function showLogin()
     {
-        return view('login');
+        return Auth::check() ? redirect('/') : view('login');
     }
 
     public function showRegister()
     {
-        return view('register');
+        return Auth::check() ? redirect('/') : view('register');
     }
 
+    // ── Login ─────────────────────────────────────────────────────────
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -26,16 +28,18 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
+
             return redirect()->intended('/');
         }
 
         return back()->withErrors([
             'email' => 'Wrong email or password.',
-        ]);
+        ])->onlyInput('email');
     }
 
+    // ── Register ──────────────────────────────────────────────────────
     public function register(Request $request)
     {
         $request->validate([
@@ -52,15 +56,19 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
+        $request->session()->regenerate();
 
         return redirect('/');
     }
 
+    // ── Logout ────────────────────────────────────────────────────────
     public function logout(Request $request)
     {
         Auth::logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect('/');
     }
 }
