@@ -64,6 +64,12 @@
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
+        ],
+        "rebuild": [
+            "php artisan optimize:clear",
+            "composer dump-autoload",
+            "php artisan migrate:fresh --seed",
+            "php artisan serve"
         ]
     },
     "extra": {
