@@ -70,6 +70,9 @@
             "composer dump-autoload",
             "php artisan migrate:fresh --seed",
             "php artisan serve"
+        ],
+        "start1": [
+            "php artisan serve"
         ]
     },
     "extra": {

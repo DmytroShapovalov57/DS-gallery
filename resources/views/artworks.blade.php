@@ -95,7 +95,6 @@
 
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h1 class="mb-0">Artworks</h1>
-                <span class="text-muted small">{{ $artworks->total() }} result{{ $artworks->total() !== 1 ? 's' : '' }}</span>
             </div>
 
             @if(request('search'))
@@ -149,8 +148,8 @@
                 </div>
 
                 @if ($artworks->hasPages())
-                    <nav class="d-flex justify-content-center mt-4">
-                        {{ $artworks->links('pagination::bootstrap-5') }}
+                    <nav class="paginator d-flex justify-content-center mt-4">
+                        {{ $artworks->links() }}
                     </nav>
                 @endif
             @endif

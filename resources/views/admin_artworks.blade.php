@@ -66,9 +66,7 @@
             @endif
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h1 class="mb-0">Artworks
-                    <span class="text-muted" style="font-size:16px;font-weight:400">({{ $artworks->total() }})</span>
-                </h1>
+                <h1 class="mb-0">Artworks</h1>
                 <a href="{{ route('admin.add') }}" class="btn btn-dark btn-sm">+ Add artwork</a>
             </div>
 
@@ -113,8 +111,8 @@
             </div>
 
             @if ($artworks->hasPages())
-                <nav class="d-flex justify-content-center mt-4">
-                    {{ $artworks->links('pagination::bootstrap-5') }}
+                <nav class="paginator d-flex justify-content-center mt-4">
+                    {{ $artworks->links() }}
                 </nav>
             @endif
 

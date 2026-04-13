@@ -225,6 +225,9 @@ img.art-image {
     border-color: var(--fg);
     color: var(--bg);
 }
+.paginator .text-muted {
+    display: none !important;
+}
 
 /* Filter panel */
 .filter-panel {

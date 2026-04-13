@@ -37,7 +37,7 @@
         </a>
 
         @auth
-            <span class="mid-btn" style="pointer-events:none;opacity:.7;font-size:12px">
+            <span class="mid-btn">
         {{ Str::before(Auth::user()->name, ' ') }}
       </span>
             <form method="POST" action="{{ route('logout') }}" class="d-inline">
