@@ -9,7 +9,7 @@
 </head>
 <body class="d-flex flex-column" style="min-height:100vh">
 
-
+@include('header')
 
 <div class="d-flex flex-grow-1">
 
@@ -47,7 +47,7 @@
             <div class="col-12 col-md-4 d-flex flex-column gap-4 pt-2">
                 <div>
                     <div class="muted-label">ARTIST</div>
-                    <div class="detail-value">{{ $artwork->artist }}</div>
+                    <div class="detail-value">{{ $artwork->artist->name }}</div>
                 </div>
                 <div>
                     <div class="muted-label">DATE</div>
@@ -109,7 +109,7 @@
 
     </main>
 </div>
-
+@include('footer')
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

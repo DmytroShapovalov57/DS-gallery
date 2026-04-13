@@ -3,39 +3,14 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>DSgallery: saved</title>
+    <title>DSgallery: Saved</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
 </head>
 <body class="d-flex flex-column" style="min-height:100vh">
 
-<!-- Header -->
-<nav class="navbar px-4 py-2 border-bottom sticky-top bg-white d-flex justify-content-between">
-    <a href="{{ route('home') }}"><img src="{{ asset('images/home/logo.png') }}" alt="DSgallery" style="max-height:40px"/></a>
-    <div class="d-flex align-items-center gap-2">
-        <div class="search-wrap">
-            <input type="text" placeholder="Search"/>
-            <img class="icon-search" src="{{ asset('icons/search.svg') }}" alt=""/>
-        </div>
-        <a class="mid-icon-btn" href="{{ route('cart') }}"><img src="{{ asset('icons/cart.svg') }}" alt="Cart"/></a>
-        <a class="mid-icon-btn active" href="{{ route('saved') }}"><img src="{{ asset('icons/bookmark.svg') }}" alt="Saved"/></a>
-        @auth
-            <span class="mid-btn" style="pointer-events:none">{{ Auth::user()->name }}</span>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="mid-btn">Log out</button>
-            </form>
-        @else
-            <a class="mid-btn" href="{{ route('login') }}">Log in</a>
-            <a class="mid-btn" href="{{ route('register') }}">Register</a>
-        @endauth
-    </div>
-</nav>
-
-<!-- Body -->
+@include('header')
 <div class="d-flex flex-grow-1">
-
-    <!-- Sidebar -->
     <aside>
         <nav>
             <a class="side-link" href="{{ route('home') }}">Home</a>
@@ -43,58 +18,55 @@
         </nav>
     </aside>
 
-    <!-- Saved -->
     <main class="p-4 overflow-y-auto flex-grow-1">
         <h1>Saved</h1>
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
 
-            <div class="col">
-                <figure class="card p-0">
-                    <a class="img-card tile-img" href="{{ route('detail') }}">
-                        <img class="art-image" src="{{ asset('images/art/van_gogh/Bridges_across_the_Seine_at_Asnieres.jpg') }}" alt=""/>
-                        <div class="tile-btns">
-                            <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
-                            <button class="sm-icon-btn in-saved"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
-                        </div>
-                    </a>
-                    <div class="tile-info">
-                        <figcaption class="name">Bridges Across the Seine at Asnières</figcaption>
-                        <div class="price">879€</div>
-                    </div>
-                </figure>
+        @if (session('success'))
+            <div class="alert alert-success py-2 mb-3" style="font-size:13px">{{ session('success') }}</div>
+        @endif
+
+        @if ($saved->isEmpty())
+            <div class="text-center py-5 text-muted">
+                <p style="font-size:18px">No saved artworks yet.</p>
+                <a href="{{ route('artworks') }}" class="btn btn-dark mt-2">Browse artworks</a>
             </div>
-
-            <div class="col">
-                <figure class="card p-0">
-                    <a class="img-card tile-img" href="{{ route('detail') }}">
-                        <img class="art-image" src="{{ asset('images/art/van_gogh/Cafe_Terrace_at_Night.jpg') }}" alt=""/>
-                        <div class="tile-btns">
-                            <button class="sm-icon-btn"><img src="{{ asset('icons/cart.svg') }}" alt=""/></button>
-                            <button class="sm-icon-btn in-saved"><img src="{{ asset('icons/bookmark.svg') }}" alt=""/></button>
-                        </div>
-                    </a>
-                    <div class="tile-info">
-                        <figcaption class="name">Café Terrace at Night</figcaption>
-                        <div class="price">950€</div>
+        @else
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+                @foreach ($saved as $artwork)
+                    <div class="col">
+                        <figure class="card p-0 h-100">
+                            <a class="img-card tile-img" href="{{ route('detail', $artwork) }}">
+                                <img class="art-image" src="{{ asset($artwork->image) }}" alt="{{ $artwork->title }}"/>
+                                <div class="tile-btns">
+                                    {{-- Add to cart --}}
+                                    <form method="POST" action="{{ route('cart.add', $artwork) }}">
+                                        @csrf
+                                        <input type="hidden" name="quantity" value="1"/>
+                                        <button type="submit" class="sm-icon-btn" title="Add to cart">
+                                            <img src="{{ asset('icons/cart.svg') }}" alt=""/>
+                                        </button>
+                                    </form>
+                                    {{-- Remove from saved --}}
+                                    <form method="POST" action="{{ route('saved.toggle', $artwork) }}">
+                                        @csrf
+                                        <button type="submit" class="sm-icon-btn in-saved" title="Remove from saved">
+                                            <img src="{{ asset('icons/bookmark.svg') }}" alt=""/>
+                                        </button>
+                                    </form>
+                                </div>
+                            </a>
+                            <div class="tile-info">
+                                <figcaption class="name">{{ $artwork->title }}</figcaption>
+                                <div class="price">{{ number_format($artwork->price, 0) }}€</div>
+                            </div>
+                        </figure>
                     </div>
-                </figure>
+                @endforeach
             </div>
-
-        </div>
+        @endif
     </main>
-
 </div>
 
-<!-- Footer -->
-<footer class="d-flex align-items-center gap-3 py-3 border-top" style="background:var(--card-bg); padding-left:1.5rem; padding-right:1.5rem">
-    <div class="d-flex gap-3">
-        <a href="#" class="opacity-50"><img src="{{ asset('icons/twitter.svg') }}" alt="Twitter" style="width:15px; height:15px"/></a>
-        <a href="#" class="opacity-50"><img src="{{ asset('icons/instagram.svg') }}" alt="Instagram" style="width:15px; height:15px"/></a>
-        <a href="#" class="opacity-50"><img src="{{ asset('icons/youtube.svg') }}" alt="YouTube" style="width:15px; height:15px"/></a>
-        <a href="#" class="opacity-50"><img src="{{ asset('icons/linkedin.svg') }}" alt="LinkedIn" style="width:15px; height:15px"/></a>
-    </div>
-    <p class="mb-0 text-muted small">© 2026 DSgallery. All rights reserved.</p>
-</footer>
-
+@include('footer')
 </body>
 </html>

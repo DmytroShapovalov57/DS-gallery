@@ -9,10 +9,10 @@
 </head>
 <body class="d-flex flex-column" style="min-height:100vh">
 
+@include('header')
 
 <div class="d-flex flex-grow-1">
 
-    <!-- Sidebar -->
     <aside>
         <nav>
             <a class="side-link" href="{{ route('home') }}">Home</a>
@@ -22,7 +22,6 @@
 
     <div class="d-flex flex-grow-1">
 
-        <!-- Filter panel -->
         <form method="GET" action="{{ route('artworks') }}" id="filterForm">
             @if(request('search'))
                 <input type="hidden" name="search" value="{{ request('search') }}"/>
@@ -33,19 +32,16 @@
 
             <div class="filter-panel">
 
-                <!-- Sort -->
                 <p class="muted-label">SORT BY</p>
-                <select name="sort" class="form-select mb-2" style="font-size:13px"
-                        onchange="this.form.submit()">
-                    <option value="title_asc"  {{ request('sort','title_asc')=='title_asc'  ? 'selected':'' }}>Title A–Z</option>
+                <select name="sort" class="form-select mb-2" style="font-size:13px" onchange="this.form.submit()">
+                    <option value="title_asc"  {{ request('sort','title_asc')=='title_asc' ? 'selected':'' }}>Title A–Z</option>
                     <option value="title_desc" {{ request('sort')=='title_desc' ? 'selected':'' }}>Title Z–A</option>
-                    <option value="price_asc"  {{ request('sort')=='price_asc'  ? 'selected':'' }}>Price ↑</option>
+                    <option value="price_asc"  {{ request('sort')=='price_asc' ? 'selected':'' }}>Price ↑</option>
                     <option value="price_desc" {{ request('sort')=='price_desc' ? 'selected':'' }}>Price ↓</option>
-                    <option value="year_asc"   {{ request('sort')=='year_asc'   ? 'selected':'' }}>Year ↑</option>
-                    <option value="year_desc"  {{ request('sort')=='year_desc'  ? 'selected':'' }}>Year ↓</option>
+                    <option value="year_asc"   {{ request('sort')=='year_asc' ? 'selected':'' }}>Year ↑</option>
+                    <option value="year_desc"  {{ request('sort')=='year_desc' ? 'selected':'' }}>Year ↓</option>
                 </select>
 
-                <!-- Price range -->
                 <p class="muted-label">PRICE (€)</p>
                 <div class="d-flex gap-1 mb-2">
                     <input class="form-control form-control-sm" type="number" name="price_min"
@@ -57,7 +53,6 @@
                            min="{{ $minPrice }}" max="{{ $maxPrice }}" style="width:80px"/>
                 </div>
 
-                <!-- Year range -->
                 <p class="muted-label">YEAR</p>
                 <div class="d-flex gap-1 mb-2">
                     <input class="form-control form-control-sm" type="number" name="year_min"
@@ -69,7 +64,6 @@
                            min="{{ $minYear }}" max="{{ $maxYear }}" style="width:80px"/>
                 </div>
 
-                <!-- Genre -->
                 <p class="muted-label">GENRE</p>
                 <div class="filter-check mb-2">
                     @foreach ($genres as $genre)
@@ -81,13 +75,12 @@
                     @endforeach
                 </div>
 
-                <!-- Artist -->
                 <p class="muted-label">ARTIST</p>
                 <div class="filter-check mb-3">
-                    @foreach ($artists as $artistName)
+                    @foreach ($artists as $artistId => $artistName)
                         <label>
-                            <input type="checkbox" name="artist[]" value="{{ $artistName }}"
-                                {{ in_array($artistName, (array) request('artist', [])) ? 'checked' : '' }}/>
+                            <input type="checkbox" name="artist[]" value="{{ $artistId }}"
+                                {{ in_array($artistId, (array) request('artist', [])) ? 'checked' : '' }}/>
                             {{ $artistName }}
                         </label>
                     @endforeach
@@ -98,7 +91,6 @@
             </div>
         </form>
 
-        <!-- Product grid -->
         <main class="p-4 flex-grow-1" style="overflow-y:auto">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -129,21 +121,26 @@
                                         <form method="POST" action="{{ route('cart.add', $artwork) }}">
                                             @csrf
                                             <input type="hidden" name="quantity" value="1"/>
-                                            <button type="submit" class="sm-icon-btn" title="Add to cart">
+                                            <button type="submit" class="sm-icon-btn">
                                                 <img src="{{ asset('icons/cart.svg') }}" alt=""/>
                                             </button>
                                         </form>
+
                                         <form method="POST" action="{{ route('saved.toggle', $artwork) }}">
                                             @csrf
-                                            @php $isSaved = in_array($artwork->id, session('saved', [])); @endphp
-                                            <button type="submit" class="sm-icon-btn {{ $isSaved ? 'in-saved' : '' }}" title="{{ $isSaved ? 'Remove from saved' : 'Save' }}">
+                                            @php $isSaved = in_array($artwork->artwork_id, session('saved', [])); @endphp
+                                            <button type="submit" class="sm-icon-btn {{ $isSaved ? 'in-saved' : '' }}">
                                                 <img src="{{ asset('icons/bookmark.svg') }}" alt=""/>
                                             </button>
                                         </form>
                                     </div>
                                 </a>
+
                                 <div class="tile-info">
-                                    <figcaption class="name">{{ $artwork->title }}</figcaption>
+                                    <figcaption class="name">
+                                        {{ $artwork->title }}
+                                        <div class="text-muted small">{{ $artwork->artist?->name }}</div>
+                                    </figcaption>
                                     <div class="price">{{ number_format($artwork->price, 0) }}€</div>
                                 </div>
                             </figure>
@@ -151,7 +148,6 @@
                     @endforeach
                 </div>
 
-                <!-- Pagination -->
                 @if ($artworks->hasPages())
                     <nav class="d-flex justify-content-center mt-4">
                         {{ $artworks->links('pagination::bootstrap-5') }}
@@ -163,6 +159,7 @@
     </div>
 </div>
 
+@include('footer')
 
 </body>
 </html>

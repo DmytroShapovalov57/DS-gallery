@@ -9,7 +9,7 @@
 </head>
 <body class="d-flex flex-column" style="min-height:100vh">
 
-
+@include('header')
 
 <div class="d-flex flex-grow-1">
     <aside>
@@ -124,7 +124,7 @@
     </main>
 </div>
 
-
+@include('footer')
 
 </body>
 </html>

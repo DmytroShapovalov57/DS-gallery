@@ -1,109 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DSgallery: admin_add</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
-  <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>DSgallery: Admin — Add Artwork</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
 </head>
 <body class="d-flex flex-column" style="min-height:100vh">
 
-  <!-- Header -->
-  <nav class="navbar px-4 py-2 border-bottom sticky-top bg-white d-flex justify-content-between">
-    <a href="{{ route('home') }}"><img src="{{ asset('images/home/logo.png') }}" alt="DSgallery" style="max-height:40px"/></a>
-    <div class="d-flex align-items-center gap-2">
-      <div class="search-wrap">
-        <input type="text" placeholder="Search"/>
-        <img class="icon-search" src="{{ asset('icons/search.svg') }}" alt=""/>
-      </div>
-      <span class="mid-btn active">admin</span>
-      <form method="POST" action="{{ route('logout') }}" class="d-inline">
-      @csrf
-      <button type="submit" class="mid-btn">Log out</button>
-    </form>
-    </div>
-  </nav>
+@include('header')
 
-  <!-- Body -->
-  <div class="d-flex flex-grow-1">
-
-    <!-- Sidebar -->
+<div class="d-flex flex-grow-1">
     <aside>
-      <nav>
-        <a class="side-link" href="{{ route('home') }}">Home</a>
-        <a class="side-link active" href="{{ route('admin.artworks') }}">Artworks</a>
-      </nav>
+        <nav>
+            <a class="side-link" href="{{ route('home') }}">Home</a>
+            <a class="side-link active" href="{{ route('admin.artworks') }}">Artworks</a>
+        </nav>
     </aside>
 
-    <!-- New detailed artwork -->
     <main class="p-4 overflow-y-auto flex-grow-1">
 
-      <div class="row g-4 align-items-start">
+        @if ($errors->any())
+            <div class="alert alert-danger py-2 mb-3" style="font-size:13px">
+                <ul class="mb-0 ps-3">
+                    @foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach
+                </ul>
+            </div>
+        @endif
 
-        <!-- Image upload -->
-        <div class="col-12 col-md-8">
-          <label class="img-upload w-100" style="cursor:pointer">
-            <img src="{{ asset('icons/img.svg') }}"/>
-            <span>Click to upload image</span>
-            <input type="file" accept="image/*" style="display:none"/>
-          </label>
-        </div>
+        <form method="POST" action="{{ route('admin.store') }}"
+              enctype="multipart/form-data">
+            @csrf
 
-        <!-- Meta fields -->
-        <div class="col-12 col-md-4 d-flex flex-column gap-4">
+            <div class="row g-4 align-items-start">
 
-          <div>
-            <div class="muted-label mb-1">TITLE</div>
-            <input class="edit-input" type="text" placeholder="Café Terrace at Night"/>
-          </div>
-          <div>
-            <div class="muted-label mb-1">ARTIST</div>
-            <input class="edit-input" type="text" placeholder="Vincent van Gogh"/>
-          </div>
-          <div>
-            <div class="muted-label mb-1">DATE</div>
-            <input class="edit-input" type="text" placeholder="1888"/>
-          </div>
-          <div>
-            <div class="muted-label mb-1">GENRE</div>
-            <select class="edit-input" style="cursor:pointer">
-              <option value="" disabled selected>Select genre</option>
-              <option>Impressionism</option>
-              <option>Renaissance</option>
-              <option>Abstract</option>
-            </select>
-          </div>
-          <div>
-            <div class="muted-label mb-1">PRICE (€)</div>
-            <input class="edit-input" type="number" placeholder="0"/>
-          </div>
-          <div>
-            <div class="muted-label mb-1">DESCRIPTION</div>
-            <textarea class="edit-input" rows="4" style="resize:vertical" placeholder="Description of the artwork..."></textarea>
-          </div>
+                <!-- Image upload -->
+                <div class="col-12 col-md-8">
+                    <label class="img-upload w-100" id="uploadLabel" style="cursor:pointer">
+                        <img src="{{ asset('icons/img.svg') }}" id="previewPlaceholder"/>
+                        <span id="uploadText">Click to upload image</span>
+                        <img id="imagePreview" src="#" alt="Preview"
+                             style="display:none;width:100%;height:100%;object-fit:contain"/>
+                        <input type="file" name="image" accept="image/*" style="display:none"
+                               onchange="previewImg(this)"/>
+                    </label>
+                </div>
 
-          <div class="border-top pt-3 d-flex gap-2">
-            <a class="mid-btn" href="{{ route('admin.artworks') }}">Cancel</a>
-            <button class="btn btn-dark btn-sm flex-grow-1">Save artwork</button>
-          </div>
+                <!-- Fields -->
+                <div class="col-12 col-md-4 d-flex flex-column gap-4">
 
-        </div>
-      </div>
+                    <div>
+                        <div class="muted-label mb-1">TITLE</div>
+                        <input class="edit-input" type="text" name="title"
+                               placeholder="Café Terrace at Night" value="{{ old('title') }}" required/>
+                    </div>
+                    <div>
+                        <div class="muted-label mb-1">ARTIST</div>
+                        <input class="edit-input" type="text" name="artist"
+                               placeholder="Vincent van Gogh" value="{{ old('artist') }}" required/>
+                    </div>
+                    <div>
+                        <div class="muted-label mb-1">DATE</div>
+                        <input class="edit-input" type="number" name="year"
+                               placeholder="1888" value="{{ old('year') }}" min="1000" max="2100" required/>
+                    </div>
+                    <div>
+                        <div class="muted-label mb-1">GENRE</div>
+                        <input class="edit-input" type="text" name="genre"
+                               list="genreList" placeholder="Impressionism" value="{{ old('genre') }}" required/>
+                        <datalist id="genreList">
+                            @foreach ($genres as $g)<option value="{{ $g }}">@endforeach
+                        </datalist>
+                    </div>
+                    <div>
+                        <div class="muted-label mb-1">PRICE (€)</div>
+                        <input class="edit-input" type="number" name="price" step="0.01"
+                               placeholder="0" value="{{ old('price') }}" min="0" required/>
+                    </div>
+                    <div>
+                        <div class="muted-label mb-1">DESCRIPTION</div>
+                        <textarea class="edit-input" name="description" rows="4"
+                                  style="resize:vertical"
+                                  placeholder="Description of the artwork…">{{ old('description') }}</textarea>
+                    </div>
 
+                    <div class="border-top pt-3 d-flex gap-2">
+                        <a class="mid-btn" href="{{ route('admin.artworks') }}">Cancel</a>
+                        <button type="submit" class="btn btn-dark btn-sm flex-grow-1">Save artwork</button>
+                    </div>
+
+                </div>
+            </div>
+        </form>
     </main>
-  </div>
+</div>
 
-  <!-- Footer -->
-  <footer class="d-flex align-items-center gap-3 py-3 border-top" style="background:var(--card-bg);padding-left:1.5rem;padding-right:1.5rem">
-    <div class="d-flex gap-3">
-      <a href="#" class="opacity-50"><img src="{{ asset('icons/twitter.svg') }}" alt="Twitter" style="width:15px;height:15px"/></a>
-      <a href="#" class="opacity-50"><img src="{{ asset('icons/instagram.svg') }}" alt="Instagram" style="width:15px;height:15px"/></a>
-      <a href="#" class="opacity-50"><img src="{{ asset('icons/youtube.svg') }}" alt="YouTube" style="width:15px;height:15px"/></a>
-      <a href="#" class="opacity-50"><img src="{{ asset('icons/linkedin.svg') }}" alt="LinkedIn" style="width:15px;height:15px"/></a>
-    </div>
-    <p class="mb-0 text-muted small">© 2026 DSgallery. All rights reserved.</p>
-  </footer>
+@include('footer')
+
+<script>
+    function previewImg(input) {
+        if (!input.files || !input.files[0]) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            document.getElementById('previewPlaceholder').style.display = 'none';
+            document.getElementById('uploadText').style.display = 'none';
+            const img = document.getElementById('imagePreview');
+            img.src = e.target.result;
+            img.style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+</script>
 
 </body>
 </html>

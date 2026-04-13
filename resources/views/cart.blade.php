@@ -9,7 +9,7 @@
 </head>
 <body class="d-flex flex-column" style="min-height:100vh">
 
-
+@include('header')
 
 <div class="d-flex flex-grow-1">
 
@@ -34,53 +34,54 @@
             </div>
         @else
 
-            @foreach ($cart as $id => $item)
-                <div class="row gx-3 align-items-center py-3 border-top">
+            @foreach ($cart as $item)
+                @php $id = $item['id'] ?? null; @endphp
 
-                    <div class="col-auto col-md-1">
-                        <img class="cart-img" src="{{ asset($item['image']) }}" alt="{{ $item['title'] }}"/>
+                @if($id)
+                    <div class="row gx-3 align-items-center py-3 border-top">
+
+                        <div class="col-auto col-md-1">
+                            <img class="cart-img" src="{{ asset($item['image']) }}" alt="{{ $item['title'] }}"/>
+                        </div>
+
+                        <div class="col col-md-5">
+                            <h2>{{ $item['title'] }}</h2>
+                            <small class="text-muted">
+                                {{ is_array($item['artist'] ?? null) ? ($item['artist']['name'] ?? '') : ($item['artist'] ?? '') }}
+                            </small>
+                        </div>
+
+                        <div class="col-auto col-md-3">
+                            <form method="POST" action="{{ route('cart.update', $id) }}">
+                                @csrf
+                                <div class="qty-control">
+                                    <button type="submit" name="quantity" value="{{ $item['quantity'] - 1 }}" class="qty-btn">−</button>
+
+                                    <input class="qty-num" type="number" name="quantity"
+                                           value="{{ $item['quantity'] }}" min="1"
+                                           onchange="this.form.submit()"/>
+
+                                    <button type="submit" name="quantity" value="{{ $item['quantity'] + 1 }}" class="qty-btn">+</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-auto col-md-2">
+                            <h2>{{ number_format($item['price'] * $item['quantity'], 0) }}€</h2>
+                        </div>
+
+                        <div class="col-auto col-md-1">
+                            <form method="POST" action="{{ route('cart.remove', $id) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="sm-icon-btn" title="Remove">
+                                    <img src="{{ asset('icons/x.svg') }}" alt=""/>
+                                </button>
+                            </form>
+                        </div>
+
                     </div>
-
-                    <div class="col col-md-5">
-                        <h2>{{ $item['title'] }}</h2>
-                        <small class="text-muted">{{ $item['artist'] }}</small>
-                    </div>
-
-                    <!-- Quantity update -->
-                    <div class="col-auto col-md-3">
-                        <form method="POST" action="{{ route('cart.update', $id) }}">
-                            @csrf
-                            <div class="qty-control">
-                                <button type="submit" name="quantity" value="{{ $item['quantity'] - 1 }}"
-                                        class="qty-btn">−</button>
-                                <input class="qty-num" type="number" name="quantity"
-                                       value="{{ $item['quantity'] }}" min="1"
-                                       onchange="this.form.submit()"/>
-                                <button type="submit" name="quantity" value="{{ $item['quantity'] + 1 }}"
-                                        class="qty-btn">+</button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="col-auto col-md-2">
-                        <h2>{{ number_format($item['price'] * $item['quantity'], 0) }}€</h2>
-                        @if ($item['quantity'] > 1)
-                            <small class="text-muted">{{ number_format($item['price'], 0) }}€ each</small>
-                        @endif
-                    </div>
-
-                    <!-- Remove -->
-                    <div class="col-auto col-md-1">
-                        <form method="POST" action="{{ route('cart.remove', $id) }}">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="sm-icon-btn" title="Remove">
-                                <img src="{{ asset('icons/x.svg') }}" alt=""/>
-                            </button>
-                        </form>
-                    </div>
-
-                </div>
+                @endif
             @endforeach
 
             <div class="row gx-3 py-3 border-top">
@@ -117,7 +118,7 @@
     </main>
 </div>
 
-
+@include('footer')
 
 </body>
 </html>
