@@ -64,39 +64,41 @@
                     </div>
                 </div>
 
-                <!-- Add to cart form -->
-                <form method="POST" action="{{ route('cart.add', $artwork) }}"
-                      class="border-top pt-3 d-flex flex-column gap-2">
-                    @csrf
-                    <div class="muted-label">QUANTITY</div>
-                    <div class="qty-control" style="width:120px">
-                        <button type="button" class="qty-btn"
-                                onclick="let i=document.getElementById('qty');i.value=Math.max(1,+i.value-1)">−</button>
-                        <input id="qty" class="qty-num" type="number" name="quantity"
-                               min="1" value="1"/>
-                        <button type="button" class="qty-btn"
-                                onclick="let i=document.getElementById('qty');i.value=+i.value+1">+</button>
+                <div class="border-top pt-3 d-flex flex-column gap-2">
+
+                    <form id="detail-form" method="POST" action="{{ route('cart.add', $artwork) }}">
+                        @csrf
+                        @php $isSaved = in_array($artwork->artwork_id, session('saved', [])); @endphp
+                        <input id="qty" name="quantity" type="hidden" value="1"/>
+
+                        <!-- − 1 + -->
+                        <div class="d-flex align-items-center gap-1 mb-2" style="width:100px">
+                            <button type="button" class="sm-icon-btn" style="width:100%"
+                                    onclick="let i=document.getElementById('qty');let d=document.getElementById('qty-display');i.value=Math.max(1,+i.value-1);d.textContent=i.value">−</button>
+                            <span id="qty-display" class="text-center" style="font-size:16px;min-width:20px">1</span>
+                            <button type="button" class="sm-icon-btn" style="width:100%"
+                                    onclick="let i=document.getElementById('qty');let d=document.getElementById('qty-display');i.value=+i.value+1;d.textContent=i.value">+</button>
+                        </div>
+
+                        <!-- Cart + Saved -->
+                        <div class="d-flex gap-2" style="width:100px">
+                            <button type="submit" class="sm-icon-btn" style="width:100%"
+                                    onclick="document.getElementById('detail-form').action='{{ route('cart.add', $artwork) }}'">
+                                <img src="{{ asset('icons/cart.svg') }}" alt="Add to cart"/>
+                            </button>
+                            <button type="submit" class="sm-icon-btn {{ $isSaved ? 'in-saved' : '' }}" style="width:100%"
+                                    onclick="document.getElementById('detail-form').action='{{ route('saved.toggle', $artwork) }}'">
+                                <img src="{{ asset('icons/bookmark.svg') }}" alt="Save"/>
+                            </button>
+                        </div>
+
+                    </form>
+
+                    <div class="d-flex">
+                        <a class="mid-btn" style="border-width:2px;width:100px;height:28px"
+                           href="{{ route('artworks') }}">Go back</a>
                     </div>
-
-                    <div class="d-flex gap-2" style="width:180px">
-                        <button type="submit" class="sm-icon-btn flex-grow-1" title="Add to cart"
-                                style="width:auto;padding:0 12px">
-                            <img src="{{ asset('icons/cart.svg') }}" alt=""/>
-                        </button>
-                    </div>
-                </form>
-
-                <form method="POST" action="{{ route('saved.toggle', $artwork) }}">
-                    @csrf
-                    @php $isSaved = in_array($artwork->artwork_id, session('saved', [])); @endphp
-                    <button type="submit" class="sm-icon-btn {{ $isSaved ? 'in-saved' : '' }}"
-                            title="{{ $isSaved ? 'Remove from saved' : 'Save' }}">
-                        <img src="{{ asset('icons/bookmark.svg') }}" alt=""/>
-                    </button>
-                </form>
-
-                <a class="mid-btn mt-1" style="border-width:2px;width:100px;height:28px"
-                   href="{{ route('artworks') }}">Go back</a>
+                </div>
             </div>
         </div>
 

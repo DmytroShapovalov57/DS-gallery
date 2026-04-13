@@ -36,7 +36,7 @@ class CartController extends Controller
 
         session(['cart' => $cart]);
 
-        return back()->with('success', "\"{$artwork->title}\" added to cart.");
+        return back();
     }
 
     public function update(Request $request, int $id)
