@@ -27,12 +27,9 @@
             </div>
         @endif
 
-        <div class="text-center py-4 mb-4 border rounded-1" style="background:#f9f9f9">
+        <div class="text-center py-4 mb-4 border rounded-1">
             <div style="font-size:48px;line-height:1">✓</div>
             <h1 class="mt-2 mb-1" style="font-size:26px">Order confirmed!</h1>
-            <p class="text-muted mb-0" style="font-size:14px">
-                Thank you for your purchase. Order #{{ $order->order_id }}
-            </p>
         </div>
 
         <div class="row g-4">
@@ -83,19 +80,6 @@
                     @if ($order->phone)
                         <div class="text-muted">{{ $order->phone }}</div>
                     @endif
-                </div>
-
-                <div class="mt-3 border rounded-1 p-3" style="font-size:13px">
-                    <div class="d-flex justify-content-between">
-                        <span class="text-muted">Payment</span>
-                        <span class="text-capitalize">{{ $order->payment_method ?? '—' }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between mt-1">
-                        <span class="text-muted">Status</span>
-                        <span class="badge bg-success" style="font-size:11px">
-                            {{ ucfirst($order->status) }}
-                        </span>
-                    </div>
                 </div>
             </div>
 

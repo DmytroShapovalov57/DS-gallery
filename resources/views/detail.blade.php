@@ -37,7 +37,7 @@
             <div class="col-12 col-md-8">
                 <div class="border rounded-1 overflow-hidden">
                     <div class="img-card" style="height:500px">
-                        <img class="art-image" src="{{ asset($artwork->image) }}"
+                        <img class="art-image" src="{{ $artwork->image }}"
                              alt="{{ $artwork->title }}" style="object-fit:contain"/>
                     </div>
                 </div>

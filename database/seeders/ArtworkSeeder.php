@@ -456,5 +456,113 @@ class ArtworkSeeder extends Seeder
         foreach ($artworks as $artwork) {
             Artwork::create($artwork);
         }
+
+        // TOOLS
+        $tools = [
+            [
+                'title' => 'Professional Brushes Set',
+                'artist_id' => null,
+                'genre' => 'Brushes',
+                'category' => 'tool',
+                'year' => 2026,
+                'price' => 45,
+                'image' => 'images/art/tools/brushes.jpg',
+                'description' => 'Set of 12 professional artist brushes for oil and acrylic painting.',
+            ],
+            [
+                'title' => 'Acrylic Paint Set',
+                'artist_id' => null,
+                'genre' => 'Paint',
+                'category' => 'tool',
+                'year' => 2026,
+                'price' => 60,
+                'image' => 'images/art/tools/acrylic_paint.jpg',
+                'description' => '24 colors of high-quality acrylic paint in 20ml tubes.',
+            ],
+            [
+                'title' => 'Oil Paint Set',
+                'artist_id' => null,
+                'genre' => 'Paint',
+                'category' => 'tool',
+                'year' => 2026,
+                'price' => 75,
+                'image' => 'images/art/tools/oil_paint.jpg',
+                'description' => '18 colors of professional oil paint for canvas work.',
+            ],
+            [
+                'title' => 'Watercolor Paint Set',
+                'artist_id' => null,
+                'genre' => 'Paint',
+                'category' => 'tool',
+                'year' => 2026,
+                'price' => 35,
+                'image' => 'images/art/tools/watercolor_paint.jpg',
+                'description' => 'Compact watercolor set with 36 vibrant colors.',
+            ],
+            [
+                'title' => 'Wooden Easel',
+                'artist_id' => null,
+                'genre' => 'Easels',
+                'category' => 'tool',
+                'year' => 2026,
+                'price' => 120,
+                'image' => 'images/art/tools/easel.jpg',
+                'description' => 'Adjustable wooden studio easel, holds canvases up to 120cm.',
+            ],
+            [
+                'title' => 'Stretched Canvas',
+                'artist_id' => null,
+                'genre' => 'Canvas',
+                'category' => 'tool',
+                'year' => 2026,
+                'price' => 25,
+                'image' => 'images/art/tools/canvas.jpg',
+                'description' => 'Pre-stretched cotton canvas 50×60cm, ready to paint.',
+            ],
+            [
+                'title' => 'Wooden Palette',
+                'artist_id' => null,
+                'genre' => 'Accessories',
+                'category' => 'tool',
+                'year' => 2026,
+                'price' => 18,
+                'image' => 'images/art/tools/palette.jpg',
+                'description' => 'Classic oval wooden palette for mixing oil and acrylic paints.',
+            ],
+            [
+                'title' => 'Palette Knife Set',
+                'artist_id' => null,
+                'genre' => 'Accessories',
+                'category' => 'tool',
+                'year' => 2026,
+                'price' => 22,
+                'image' => 'images/art/tools/palette_knife.jpg',
+                'description' => 'Set of 5 stainless steel palette knives for texture and mixing.',
+            ],
+            [
+                'title' => 'Brush Cleaner Jar',
+                'artist_id' => null,
+                'genre' => 'Accessories',
+                'category' => 'tool',
+                'year' => 2026,
+                'price' => 12,
+                'image' => 'images/art/tools/water_jar.jpg',
+                'description' => 'Glass jar with metal coil for cleaning brushes.',
+            ],
+            [
+                'title' => 'Paint Thinner',
+                'artist_id' => null,
+                'genre' => 'Accessories',
+                'category' => 'tool',
+                'year' => 2026,
+                'price' => 15,
+                'image' => 'images/art/tools/thinner.jpg',
+                'description' => 'Odourless paint thinner for oil paints, 500ml.',
+            ],
+        ];
+
+        foreach ($tools as $tool) {
+            Artwork::create($tool);
+        }
     }
 }

@@ -93,7 +93,7 @@ class OrderController extends Controller
         session()->forget(['cart', 'shipping']);
 
         return redirect()->route('orders.show', $order)
-            ->with('success', 'Order placed successfully! Thank you for your purchase.');
+            ->with('success');
     }
 
     public function show(Order $order)

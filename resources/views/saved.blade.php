@@ -36,7 +36,7 @@
                     <div class="col">
                         <figure class="card p-0 h-100">
                             <a class="img-card tile-img" href="{{ route('detail', $artwork) }}">
-                                <img class="art-image" src="{{ asset($artwork->image) }}" alt="{{ $artwork->title }}"/>
+                                <img class="art-image" src="{{ $artwork->image }}" alt="{{ $artwork->title }}"/>
                                 <div class="tile-btns">
                                     {{-- Add to cart --}}
                                     <form method="POST" action="{{ route('cart.add', $artwork) }}">

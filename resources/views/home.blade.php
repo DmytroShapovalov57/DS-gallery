@@ -55,7 +55,7 @@
                     <div class="col">
                         <figure class="card p-0">
                             <a class="img-card" style="height:300px" href="{{ route('detail', $artwork) }}">
-                                <img class="art-image" src="{{ asset($artwork->image) }}" alt="{{ $artwork->title }}"/>
+                                <img class="art-image" src="{{ $artwork->image }}" alt="{{ $artwork->title }}"/>
                                 <div class="tile-btns">
                                     <form method="POST" action="{{ route('cart.add', $artwork) }}">
                                         @csrf

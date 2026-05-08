@@ -55,16 +55,19 @@
                         <input class="edit-input" type="text" name="title"
                                placeholder="Café Terrace at Night" value="{{ old('title') }}" required/>
                     </div>
+
                     <div>
                         <div class="muted-label mb-1">ARTIST</div>
                         <input class="edit-input" type="text" name="artist"
                                placeholder="Vincent van Gogh" value="{{ old('artist') }}" required/>
                     </div>
+
                     <div>
                         <div class="muted-label mb-1">DATE</div>
                         <input class="edit-input" type="number" name="year"
                                placeholder="1888" value="{{ old('year') }}" min="1000" max="2100" required/>
                     </div>
+
                     <div>
                         <div class="muted-label mb-1">GENRE</div>
                         <input class="edit-input" type="text" name="genre"
@@ -73,11 +76,25 @@
                             @foreach ($genres as $g)<option value="{{ $g }}">@endforeach
                         </datalist>
                     </div>
+
+                    <div>
+                        <div class="muted-label mb-1">CATEGORY</div>
+                        <select class="edit-input" name="category" style="cursor:pointer">
+                            <option value="artwork" {{ old('category', $artwork->category ?? 'artwork') === 'artwork' ? 'selected' : '' }}>
+                                Artwork
+                            </option>
+                            <option value="tool" {{ old('category', $artwork->category ?? '') === 'tool' ? 'selected' : '' }}>
+                                Tool
+                            </option>
+                        </select>
+                    </div>
+
                     <div>
                         <div class="muted-label mb-1">PRICE (€)</div>
                         <input class="edit-input" type="number" name="price" step="0.01"
                                placeholder="0" value="{{ old('price') }}" min="0" required/>
                     </div>
+
                     <div>
                         <div class="muted-label mb-1">DESCRIPTION</div>
                         <textarea class="edit-input" name="description" rows="4"

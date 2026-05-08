@@ -12,6 +12,9 @@ class ArtworkController extends Controller
     {
         $query = Artwork::query()->with('artist');
 
+        $category = $request->get('category', 'artwork');
+        $query->where('category', $category);
+
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
@@ -30,20 +33,23 @@ class ArtworkController extends Controller
             $query->where('price', '<=', (float) $request->price_max);
         }
 
-        if ($request->filled('genre')) {
-            $query->whereIn('genre', (array) $request->genre);
-        }
-
-        if ($request->filled('artist')) {
-            $query->whereIn('artist_id', (array) $request->artist);
-        }
-
-        if ($request->filled('year_min')) {
-            $query->where('year', '>=', (int) $request->year_min);
-        }
-
-        if ($request->filled('year_max')) {
-            $query->where('year', '<=', (int) $request->year_max);
+        if ($category === 'tool') {
+            if ($request->filled('type')) {
+                $query->whereIn('genre', (array) $request->type);
+            }
+        } else {
+            if ($request->filled('genre')) {
+                $query->whereIn('genre', (array) $request->genre);
+            }
+            if ($request->filled('artist')) {
+                $query->whereIn('artist_id', (array) $request->artist);
+            }
+            if ($request->filled('year_min')) {
+                $query->where('year', '>=', (int) $request->year_min);
+            }
+            if ($request->filled('year_max')) {
+                $query->where('year', '<=', (int) $request->year_max);
+            }
         }
 
         $sort = $request->get('sort', 'title_asc');
@@ -59,17 +65,21 @@ class ArtworkController extends Controller
 
         $artworks = $query->paginate(9)->withQueryString();
 
-        $genres = Artwork::select('genre')
+        $genres = Artwork::where('category', $category)
+            ->whereNotNull('genre')
+            ->select('genre')
             ->distinct()
             ->orderBy('genre')
             ->pluck('genre');
 
-        $artists = Artist::orderBy('name')->pluck('name', 'artist_id');
+        $artists = Artist::whereHas('artworks', function($q) use ($category) {
+            $q->where('category', $category);
+        })->orderBy('name')->pluck('name', 'artist_id');
 
-        $minPrice = (int) Artwork::min('price');
-        $maxPrice = (int) Artwork::max('price');
-        $minYear = (int) Artwork::min('year');
-        $maxYear = (int) Artwork::max('year');
+        $minPrice = (int) Artwork::where('category', $category)->min('price');
+        $maxPrice = (int) Artwork::where('category', $category)->max('price');
+        $minYear  = (int) Artwork::where('category', $category)->whereNotNull('year')->min('year');
+        $maxYear  = (int) Artwork::where('category', $category)->whereNotNull('year')->max('year');
 
         return view('artworks', compact(
             'artworks',
@@ -78,7 +88,8 @@ class ArtworkController extends Controller
             'minPrice',
             'maxPrice',
             'minYear',
-            'maxYear'
+            'maxYear',
+            'category'
         ));
     }
 

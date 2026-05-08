@@ -94,15 +94,22 @@
                     </div>
 
                     <div>
+                        <select class="edit-input" name="category" style="cursor:pointer">
+                            <option value="artwork" selected>Artwork</option>
+                            <option value="tool">Tool</option>
+                        </select>
+                    </div>
+
+                    <div>
                         <div class="muted-label mb-1">PRICE (€)</div>
                         <input class="edit-input" type="number" name="price" step="0.01"
-                               value="{{ old('price', $artwork->price) }}" min="0" required/>
+                            value="{{ old('price', $artwork->price) }}" min="0" required/>
                     </div>
 
                     <div>
                         <div class="muted-label mb-1">DESCRIPTION</div>
                         <textarea class="edit-input" name="description" rows="4" style="resize:vertical">
-{{ old('description', $artwork->description) }}
+                            {{ old('description', $artwork->description) }}
                         </textarea>
                     </div>
 

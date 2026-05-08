@@ -72,11 +72,19 @@
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
 
+                <!-- Add artwork card -->
+                <div class="col">
+                    <a class="add-card" href="{{ route('admin.add') }}">
+                        <img src="{{ asset('icons/add.svg') }}" style="width:30px;height:30px"/>
+                        <span>Add artwork</span>
+                    </a>
+                </div>
+
                 @foreach ($artworks as $artwork)
                     <div class="col">
                         <figure class="card p-0 h-100">
                             <a class="img-card" style="height:260px" href="{{ route('admin.detail', $artwork) }}">
-                                <img class="art-image" src="{{ asset($artwork->image) }}" alt="{{ $artwork->title }}"/>
+                                <img class="art-image" src="{{ $artwork->image }}" alt="{{ $artwork->title }}"/>
 
                                 <!-- Delete button -->
                                 <form method="POST" action="{{ route('admin.destroy', $artwork) }}"
@@ -99,14 +107,6 @@
                         </figure>
                     </div>
                 @endforeach
-
-                <!-- Add artwork card -->
-                <div class="col">
-                    <a class="add-card" href="{{ route('admin.add') }}">
-                        <img src="{{ asset('icons/add.svg') }}" style="width:30px;height:30px"/>
-                        <span>Add artwork</span>
-                    </a>
-                </div>
 
             </div>
 

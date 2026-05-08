@@ -13,6 +13,7 @@ class Artwork extends Model
         'artist_id',
         'year',
         'genre',
+        'category',
         'price',
         'description',
         'image'

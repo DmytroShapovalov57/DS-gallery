@@ -28,9 +28,11 @@
             @endif
             @if(request('sort'))
                 <input type="hidden" name="sort" value="{{ request('sort') }}"/>
+                <input type="hidden" name="category" value="{{ $category }}"/>
             @endif
 
             <div class="filter-panel">
+                <input type="hidden" name="category" value="{{ $category }}"/>
 
                 <p class="muted-label">SORT BY</p>
                 <select name="sort" class="form-select mb-2" style="font-size:13px" onchange="this.form.submit()">
@@ -53,45 +55,73 @@
                            min="{{ $minPrice }}" max="{{ $maxPrice }}" style="width:80px"/>
                 </div>
 
-                <p class="muted-label">YEAR</p>
-                <div class="d-flex gap-1 mb-2">
-                    <input class="form-control form-control-sm" type="number" name="year_min"
-                           placeholder="{{ $minYear }}" value="{{ request('year_min') }}"
-                           min="{{ $minYear }}" max="{{ $maxYear }}" style="width:80px"/>
-                    <span class="align-self-center">–</span>
-                    <input class="form-control form-control-sm" type="number" name="year_max"
-                           placeholder="{{ $maxYear }}" value="{{ request('year_max') }}"
-                           min="{{ $minYear }}" max="{{ $maxYear }}" style="width:80px"/>
-                </div>
+                @if($category === 'artwork')
+                    {{-- Artworks: Year, Genre, Artist --}}
+                    <p class="muted-label">YEAR</p>
+                    <div class="d-flex gap-1 mb-2">
+                        <input class="form-control form-control-sm" type="number" name="year_min"
+                               placeholder="{{ $minYear }}" value="{{ request('year_min') }}"
+                               min="{{ $minYear }}" max="{{ $maxYear }}" style="width:80px"/>
+                        <span class="align-self-center">–</span>
+                        <input class="form-control form-control-sm" type="number" name="year_max"
+                               placeholder="{{ $maxYear }}" value="{{ request('year_max') }}"
+                               min="{{ $minYear }}" max="{{ $maxYear }}" style="width:80px"/>
+                    </div>
 
-                <p class="muted-label">GENRE</p>
-                <div class="filter-check mb-2">
-                    @foreach ($genres as $genre)
-                        <label>
-                            <input type="checkbox" name="genre[]" value="{{ $genre }}"
-                                {{ in_array($genre, (array) request('genre', [])) ? 'checked' : '' }}/>
-                            {{ $genre }}
-                        </label>
-                    @endforeach
-                </div>
+                    <p class="muted-label">GENRE</p>
+                    <div class="filter-check mb-2">
+                        @foreach ($genres as $genre)
+                            <label>
+                                <input type="checkbox" name="genre[]" value="{{ $genre }}"
+                                    {{ in_array($genre, (array) request('genre', [])) ? 'checked' : '' }}/>
+                                {{ $genre }}
+                            </label>
+                        @endforeach
+                    </div>
 
-                <p class="muted-label">ARTIST</p>
-                <div class="filter-check mb-3">
-                    @foreach ($artists as $artistId => $artistName)
-                        <label>
-                            <input type="checkbox" name="artist[]" value="{{ $artistId }}"
-                                {{ in_array($artistId, (array) request('artist', [])) ? 'checked' : '' }}/>
-                            {{ $artistName }}
-                        </label>
-                    @endforeach
-                </div>
+                    <p class="muted-label">ARTIST</p>
+                    <div class="filter-check mb-3">
+                        @foreach ($artists as $artistId => $artistName)
+                            <label>
+                                <input type="checkbox" name="artist[]" value="{{ $artistId }}"
+                                    {{ in_array($artistId, (array) request('artist', [])) ? 'checked' : '' }}/>
+                                {{ $artistName }}
+                            </label>
+                        @endforeach
+                    </div>
+
+                @else
+                    {{-- Tools: Type only --}}
+                    <p class="muted-label">TYPE</p>
+                    <div class="filter-check mb-3">
+                        @foreach ($genres as $type)
+                            <label>
+                                <input type="checkbox" name="type[]" value="{{ $type }}"
+                                    {{ in_array($type, (array) request('type', [])) ? 'checked' : '' }}/>
+                                {{ $type }}
+                            </label>
+                        @endforeach
+                    </div>
+                @endif
 
                 <button type="submit" class="btn btn-dark btn-sm w-100 mb-1">Apply</button>
-                <a href="{{ route('artworks') }}" class="btn btn-outline-secondary btn-sm w-100">Reset</a>
+                <a href="{{ route('artworks', ['category' => $category]) }}"
+                   class="btn btn-outline-secondary btn-sm w-100">Reset</a>
             </div>
         </form>
 
         <main class="p-4 flex-grow-1" style="overflow-y:auto">
+
+            <div class="d-flex gap-2 mb-4">
+                <a href="{{ route('artworks', array_merge(request()->except(['category','page']), ['category' => 'artwork'])) }}"
+                   class="mid-btn {{ $category === 'artwork' ? 'active' : '' }}">
+                    Artworks
+                </a>
+                <a href="{{ route('artworks', array_merge(request()->except(['category','page']), ['category' => 'tool'])) }}"
+                   class="mid-btn {{ $category === 'tool' ? 'active' : '' }}">
+                    Tools
+                </a>
+            </div>
 
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h1 class="mb-0">Artworks</h1>
@@ -115,7 +145,7 @@
                         <div class="col">
                             <figure class="card p-0 h-100">
                                 <a class="img-card" style="height:300px" href="{{ route('detail', $artwork) }}">
-                                    <img class="art-image" src="{{ asset($artwork->image) }}" alt="{{ $artwork->title }}"/>
+                                    <img class="art-image" src="{{ $artwork->image }}" alt="{{ $artwork->title }}"/>
                                     <div class="tile-btns">
                                         <form method="POST" action="{{ route('cart.add', $artwork) }}">
                                             @csrf

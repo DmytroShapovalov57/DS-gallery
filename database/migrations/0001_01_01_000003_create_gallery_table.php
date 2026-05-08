@@ -23,12 +23,13 @@ return new class extends Migration {
             $table->string('title');
             $table->integer('year')->nullable();
             $table->string('genre')->nullable();
+            $table->string('category')->default('artwork');
             $table->integer('price')->default(0);
             $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
 
-            $table->foreignId('artist_id')->references('artist_id')->on('artists')->cascadeOnDelete();
+            $table->foreignId('artist_id')->nullable()->references('artist_id')->on('artists')->cascadeOnDelete();
         });
 
         // 3. Orders (depends on users)
