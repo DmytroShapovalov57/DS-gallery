@@ -9,16 +9,7 @@ class Product extends Model
     protected $table = 'DS_Products';
     protected $primaryKey = 'product_id';
 
-    protected $fillable = [
-        'title',
-        'artist_id',
-        'year',
-        'genre',
-        'category',
-        'price',
-        'description',
-        'image'
-    ];
+    protected $fillable = ['title', 'artist_id', 'year', 'genre', 'category', 'price', 'description'];
 
     public function artist()
     {
@@ -38,5 +29,11 @@ class Product extends Model
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class, 'product_id', 'product_id');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class, 'product_id', 'product_id')
+            ->orderBy('order');
     }
 }

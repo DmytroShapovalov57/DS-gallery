@@ -28,91 +28,109 @@
         @endif
 
         <!-- UPDATE FORM -->
-        <form method="POST" action="{{ route('admin.update', $product) }}" enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
+            <form method="POST" action="{{ route('admin.update', $product) }}" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
 
-            <div class="row g-4 align-items-start">
+                <div class="row g-4 align-items-start">
 
-                <!-- Image -->
-                <div class="col-12 col-md-8">
-                    <label class="img-upload w-100" style="cursor:pointer;border:none;background:none">
-                        <img id="imagePreview"
-                             src="{{ asset($product->image) }}"
-                             alt="{{ $product->title }}"
-                             style="width:100%;height:505px;object-fit:contain"/>
-                        <input type="file" name="image" accept="image/*" style="display:none"
-                               onchange="previewImg(this)"/>
-                    </label>
-                    <p class="text-muted text-center mt-1" style="font-size:12px">
-                        Click image to replace it
-                    </p>
-                </div>
+                    <div class="col-12 col-md-8">
+                        <div class="muted-label mb-2">CURRENT IMAGES (Select to remove)</div>
 
-                <!-- Fields -->
-                <div class="col-12 col-md-4 d-flex flex-column gap-4">
+                        <!-- Images -->
+                        <div class="row row-cols-2 row-cols-lg-3 g-3 mb-4">
+                            @foreach($product->images as $image)
+                                <div class="col text-center">
+                                    <div class="border rounded p-2 position-relative">
+                                        <img src="{{ asset($image->img_path) }}"
+                                             style="width:100%; height:150px; object-fit:contain"
+                                             alt="Product image">
 
-                    <div>
-                        <div class="muted-label mb-1">TITLE</div>
-                        <input class="edit-input" type="text" name="title"
-                               value="{{ old('title', $product->title) }}" required/>
-                    </div>
-
-                    <div>
-                        <div class="muted-label mb-1">ARTIST</div>
-                        <input class="edit-input" type="text" name="artist"
-                               value="{{ old('artist', $product->artist) }}" required/>
-                    </div>
-
-                    <div>
-                        <div class="muted-label mb-1">DATE</div>
-                        <input class="edit-input" type="number" name="year"
-                               value="{{ old('year', $product->year) }}"
-                               min="1000" max="2100" required/>
-                    </div>
-
-                    <div>
-                        <div class="muted-label mb-1">GENRE</div>
-                        <input class="edit-input" type="text" name="genre"
-                               list="genreList"
-                               value="{{ old('genre', $product->genre) }}" required/>
-                        <datalist id="genreList">
-                            @foreach ($genres as $g)
-                                <option value="{{ $g }}">
+                                        <div class="mt-2">
+                                            <input type="checkbox" name="remove_images[]" value="{{ $image->id }}" id="img_{{ $image->id }}">
+                                            <label for="img_{{ $image->id }}" class="small text-danger" style="cursor:pointer">
+                                                Remove
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
                             @endforeach
-                        </datalist>
+                        </div>
+
+                        <div class="border rounded p-4 text-center" style="border-style: dashed !important;">
+                            <div class="muted-label mb-2">ADD NEW IMAGES</div>
+                            <input type="file" name="new_images[]" class="form-control form-control-sm" multiple accept="image/*">
+                            <p class="text-muted mt-2" style="font-size:12px">
+                                You can select multiple files at once
+                            </p>
+                        </div>
                     </div>
 
-                    <div>
-                        <select class="edit-input" name="category" style="cursor:pointer">
-                            <option value="product" selected>product</option>
-                            <option value="tool">Tool</option>
-                        </select>
-                    </div>
 
-                    <div>
-                        <div class="muted-label mb-1">PRICE (€)</div>
-                        <input class="edit-input" type="number" name="price" step="0.01"
-                            value="{{ old('price', $product->price) }}" min="0" required/>
-                    </div>
+                    <!-- Fields -->
+                    <div class="col-12 col-md-4 d-flex flex-column gap-4">
 
-                    <div>
-                        <div class="muted-label mb-1">DESCRIPTION</div>
-                        <textarea class="edit-input" name="description" rows="4" style="resize:vertical">
+                        <div>
+                            <div class="muted-label mb-1">TITLE</div>
+                            <input class="edit-input" type="text" name="title"
+                                   value="{{ old('title', $product->title) }}" required/>
+                        </div>
+
+                        <div>
+                            <div class="muted-label mb-1">ARTIST</div>
+                            <input class="edit-input" type="text" name="artist"
+                                   value="{{ old('artist', $product->artist?->name) }}" required/>
+                        </div>
+
+                        <div>
+                            <div class="muted-label mb-1">DATE</div>
+                            <input class="edit-input" type="number" name="year"
+                                   value="{{ old('year', $product->year) }}"
+                                   min="1000" max="2100" required/>
+                        </div>
+
+                        <div>
+                            <div class="muted-label mb-1">GENRE</div>
+                            <input class="edit-input" type="text" name="genre"
+                                   list="genreList"
+                                   value="{{ old('genre', $product->genre) }}" required/>
+                            <datalist id="genreList">
+                                @foreach ($genres as $g)
+                                    <option value="{{ $g }}">
+                                @endforeach
+                            </datalist>
+                        </div>
+
+                        <div>
+                            <select class="edit-input" name="category" style="cursor:pointer">
+                                <option value="artwork" selected>Artwork</option>
+                                <option value="tool">Tool</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <div class="muted-label mb-1">PRICE (€)</div>
+                            <input class="edit-input" type="number" name="price" step="0.01"
+                                   value="{{ old('price', $product->price) }}" min="0" required/>
+                        </div>
+
+                        <div>
+                            <div class="muted-label mb-1">DESCRIPTION</div>
+                            <textarea class="edit-input" name="description" rows="4" style="resize:vertical">
                             {{ old('description', $product->description) }}
                         </textarea>
-                    </div>
+                        </div>
 
-                    <div class="border-top pt-3 d-flex gap-2">
-                        <a class="mid-btn" href="{{ route('admin.products') }}">Cancel</a>
-                        <button type="submit" class="btn btn-dark btn-sm flex-grow-1">
-                            Save changes
-                        </button>
-                    </div>
+                        <div class="border-top pt-3 d-flex gap-2">
+                            <a class="mid-btn" href="{{ route('admin.products') }}">Cancel</a>
+                            <button type="submit" class="btn btn-dark btn-sm flex-grow-1">
+                                Save changes
+                            </button>
+                        </div>
 
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
 
         <!-- DELETE FORM -->
         <div class="border-top pt-3 mt-3">

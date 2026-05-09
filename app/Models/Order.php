@@ -9,21 +9,8 @@ class Order extends Model
     protected $table = 'DS_Orders';
     protected $primaryKey = 'order_id';
 
-    protected $fillable = [
-        'user_id',
-        'status',
-        'total',
-        'payment_method',
-        'first_name',
-        'last_name',
-        'email',
-        'phone',
-        'country',
-        'city',
-        'postal_code',
-        'address',
-        'address2',
-    ];
+    protected $fillable = ['user_id', 'status', 'total', 'payment_method', 'first_name', '
+        last_name', 'email', 'phone', 'country', 'city', 'postal_code', 'address', 'address2',];
 
     public function user()
     {

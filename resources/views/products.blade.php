@@ -51,7 +51,7 @@
                            min="{{ $minPrice }}" max="{{ $maxPrice }}" style="width:80px"/>
                 </div>
 
-                @if($category === 'product')
+                @if($category === 'artwork')
                     {{-- products: Year, Genre, Artist --}}
                     <p class="muted-label">YEAR</p>
                     <div class="d-flex gap-1 mb-2">
@@ -113,8 +113,8 @@
             </div>
 
             <div class="d-flex gap-2 mb-4">
-                <a href="{{ route('products', array_merge(request()->except(['category','page']), ['category' => 'product'])) }}"
-                   class="mid-btn {{ $category === 'product' ? 'active' : '' }}">
+                <a href="{{ route('products', array_merge(request()->except(['category','page']), ['category' => 'artwork'])) }}"
+                   class="mid-btn {{ $category === 'artwork' ? 'active' : '' }}">
                     Artworks
                 </a>
                 <a href="{{ route('products', array_merge(request()->except(['category','page']), ['category' => 'tool'])) }}"
@@ -141,7 +141,10 @@
                         <div class="col">
                             <figure class="card p-0 h-100">
                                 <a class="img-card" style="height:300px" href="{{ route('detail', $product) }}">
-                                    <img class="art-image" src="{{ asset($product->image) }}" alt="{{ $product->title }}"/>
+
+                                    @php $firstImage = $product->images->first()?->img_path; @endphp
+                                    <img class="art-image" src="{{ asset($firstImage) }}" alt="{{ $product->title }}"/>
+
                                     <div class="tile-btns">
                                         <form method="POST" action="{{ route('cart.add', $product) }}">
                                             @csrf

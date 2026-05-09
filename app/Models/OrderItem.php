@@ -9,14 +9,7 @@ class OrderItem extends Model
     protected $table = 'DS_OrderItems';
     protected $primaryKey = 'order_item_id';
 
-    protected $fillable = [
-        'order_id',
-        'product_id',
-        'quantity',
-        'title',
-        'artist',
-        'price',
-    ];
+    protected $fillable = ['order_id', 'product_id', 'quantity', 'title', 'artist', 'price',];
 
     public function order()
     {

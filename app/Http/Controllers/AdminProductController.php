@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Artist;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Models\ProductImage;
 
 class AdminProductController extends Controller
 {
     public function index(Request $request)
     {
-        $category = $request->get('category', 'product');
-        $query = Product::with('artist')->where('category', $category);
+        $category = $request->get('category', 'artwork');
+        $query = Product::with(['artist', 'images'])->where('category', $category);
 
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search) {
@@ -94,67 +94,92 @@ class AdminProductController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'       => 'required|string|max:255',
-            'artist'      => 'required|string|max:255',
-            'year'        => 'required|integer|min:1000|max:2100',
-            'genre'       => 'required|string|max:100',
-            'category'    => 'required|in:product,tool',
-            'price'       => 'required|numeric|min:0',
+            'title' => 'required|string|max:255',
+            'artist' => 'required|string|max:255',
+            'year' => 'required|integer|min:1000|max:2100',
+            'genre' => 'required|string|max:100',
+            'category' => 'required|in:artwork,tool',
+            'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
-            'image'       => 'nullable|image|max:4096',
+            'images' => 'nullable|array',
+            'images.*' => 'image|max:4096',
         ]);
 
-        if ($request->hasFile('image')) {
-            $path          = $request->file('image')->store('images/art/uploads', 'public');
-            $data['image'] = 'storage/' . $path;
-        } else {
-            $data['image'] = 'images/art/van_gogh/Bridges_across_the_Seine_at_Asnieres.jpg';
+        $product = Product::create($data);
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $index => $file) {
+                $path = $file->store('images/art/uploads', 'public');
+                $product->images()->create([
+                    'img_path' => 'storage/' . $path,
+                    'order'    => $index
+                ]);
+            }
         }
 
-        Product::create($data);
-
         return redirect()->route('admin.products')
-            ->with('success', 'Product created successfully.');
-    }
-
-    public function edit(Product $product)
-    {
-        $genres = Product::distinct()->orderBy('genre')->pluck('genre');
-
-        return view('admin_detail', compact('product', 'genres'));
+            ->with('success', 'Product created with images.');
     }
 
     public function update(Request $request, Product $product)
     {
         $data = $request->validate([
-            'title'       => 'required|string|max:255',
-            'artist'      => 'required|string|max:255',
-            'year'        => 'required|integer|min:1000|max:2100',
-            'genre'       => 'required|string|max:100',
-            'category'    => 'required|in:product,tool',
-            'price'       => 'required|numeric|min:0',
+            'title' => 'required|string|max:255',
+            'artist' => 'required|string|max:255',
+            'year' => 'required|integer|min:1000|max:2100',
+            'genre' => 'required|string|max:100',
+            'category' => 'required|in:artwork,tool',
+            'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
-            'image'       => 'nullable|image|max:4096',
+            'new_images' => 'nullable|array',
+            'new_images.*' => 'image|max:4096',
+            'remove_images' => 'nullable|array',
         ]);
 
-        if ($request->hasFile('image')) {
-            $path          = $request->file('image')->store('images/art/uploads', 'public');
-            $data['image'] = 'storage/' . $path;
-        } else {
-            unset($data['image']);
-        }
+        $artist = Artist::firstOrCreate(['name' => $data['artist']]);
+        $data['artist_id'] = $artist->id;
 
         $product->update($data);
 
+        // Delete selected images
+        if ($request->filled('remove_images')) {
+            ProductImage::whereIn('id', $request->remove_images)->delete();
+        }
+
+        // Upload new images
+        if ($request->hasFile('new_images')) {
+            $lastOrder = $product->images()->max('order') ?? -1;
+            foreach ($request->file('new_images') as $index => $file) {
+                $path = $file->store('images/art/uploads', 'public');
+                $product->images()->create([
+                    'img_path' => 'storage/' . $path,
+                    'order'    => $lastOrder + $index + 1
+                ]);
+            }
+        }
+
         return redirect()->route('admin.products')
-            ->with('success', 'Product updated successfully.');
+            ->with('success', 'Product updated.');
     }
 
     public function destroy(Product $product)
     {
+        $product->images()->delete();
         $product->delete();
 
         return redirect()->route('admin.products')
-            ->with('success', 'Product deleted.');
+            ->with('success', 'Product and its images deleted.');
+    }
+
+    public function edit(Product $product)
+    {
+        $product->load('images');
+
+        $genres = Product::distinct()
+            ->whereNotNull('genre')
+            ->orderBy('genre')
+            ->pluck('genre');
+
+        return view('admin_detail', compact('product', 'genres'));
     }
 }

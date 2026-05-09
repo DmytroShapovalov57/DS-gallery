@@ -34,15 +34,15 @@ class OrderController extends Controller
         }
 
         $shipping = $request->validate([
-            'first_name'  => 'required|string|max:255',
-            'last_name'   => 'required|string|max:255',
-            'email'       => 'required|email',
-            'phone'       => 'nullable|string|max:30',
-            'country'     => 'required|string',
-            'city'        => 'required|string',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'phone' => 'nullable|string|max:30',
+            'country' => 'required|string',
+            'city' => 'required|string',
             'postal_code' => 'required|string|max:20',
-            'address'     => 'required|string',
-            'address2'    => 'nullable|string',
+            'address' => 'required|string',
+            'address2' => 'nullable|string',
         ]);
 
         session(['shipping' => $shipping]);
@@ -74,19 +74,19 @@ class OrderController extends Controller
 
         $order = Order::create([
             ...$shipping,
-            'user_id'        => Auth::id(),
-            'status'         => 'paid',
-            'total'          => $total,
+            'user_id' => Auth::id(),
+            'status' => 'paid',
+            'total' => $total,
             'payment_method' => $request->payment_method,
         ]);
 
         foreach ($cart as $item) {
             $order->items()->create([
                 'product_id' => $item['id'],
-                'title'      => $item['title'],
-                'artist'     => $item['artist'],
-                'price'      => $item['price'],
-                'quantity'   => $item['quantity'],
+                'title' => $item['title'],
+                'artist' => $item['artist'],
+                'price' => $item['price'],
+                'quantity' => $item['quantity'],
             ]);
         }
 
@@ -102,7 +102,7 @@ class OrderController extends Controller
             abort(403);
         }
 
-        $order->load('items');
+        $order->load('items.product.images');
 
         return view('order_detail', compact('order'));
     }

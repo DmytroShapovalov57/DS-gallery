@@ -24,10 +24,57 @@
             <!-- Image -->
             <div class="col-12 col-md-8">
                 <div class="border rounded-1 overflow-hidden">
-                    <div class="img-card" style="height:500px">
-                        <img class="art-image" src="{{ asset($product->image) }}"
-                             alt="{{ $product->title }}" style="object-fit:contain"/>
-                    </div>
+
+                    @if($product->images->count() > 0)
+                        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+
+                            {{-- Navigation --}}
+                            @if($product->images->count() > 1)
+                                <div class="carousel-indicators">
+                                    @foreach($product->images as $i => $img_path)
+                                        <button type="button" data-bs-target="#productCarousel"
+                                                data-bs-slide-to="{{ $i }}"
+                                                class="{{ $i === 0 ? 'active' : '' }}">
+                                        </button>
+                                    @endforeach
+                                </div>
+                            @endif
+
+                            {{-- Slides --}}
+                            <div class="carousel-inner">
+                                @foreach($product->images as $i => $image)
+                                    <div class="carousel-item {{ $i === 0 ? 'active' : '' }}">
+                                        <div class="img-card" style="height:500px">
+                                            <img class="art-image"
+                                                 src="{{ asset($image->img_path) }}"
+                                                 alt="{{ $product->title }}"
+                                                 style="object-fit:contain"/>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            {{-- Arrows --}}
+                            @if($product->images->count() > 1)
+                                <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#productCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon"></span>
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                        data-bs-target="#productCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon"></span>
+                                </button>
+                            @endif
+
+                        </div>
+                    @else
+                        {{-- If no image --}}
+                        <div class="img-card" style="height:500px">
+                            <img class="art-image" src="{{ asset($product->image ?? 'icons/img.svg') }}"
+                                 alt="{{ $product->title }}" style="object-fit:contain"/>
+                        </div>
+                    @endif
+
                 </div>
             </div>
 

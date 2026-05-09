@@ -16,10 +16,7 @@ class User extends Authenticatable
     protected $table = 'DS_Users';
     protected function casts(): array
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return ['email_verified_at' => 'datetime', 'password' => 'hashed',];
     }
 
     public function isAdmin(): bool

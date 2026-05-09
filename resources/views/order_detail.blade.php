@@ -30,9 +30,8 @@
                 @foreach ($order->items as $item)
                     <div class="d-flex align-items-center gap-3 py-3 border-top">
                         <div class="col-auto">
-                            <img src="{{ asset($item->product->image ?? 'icons/img.svg') }}"
-                                 alt="{{ $item->title }}"
-                                 style="width:64px;height:64px;object-fit:cover;border-radius:4px"/>
+                            @php $firstImage = $item->product->images->first()?->img_path; @endphp
+                            <img src="{{ asset($firstImage) }}" alt="{{ $item->title }}" style="width:64px;height:64px;object-fit:cover;border-radius:4px"/>
                         </div>
                         <div class="flex-grow-1">
                             <div style="font-size:14px;font-weight:500">{{ $item->title }}</div>

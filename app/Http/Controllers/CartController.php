@@ -24,12 +24,14 @@ class CartController extends Controller
         if (isset($cart[$id])) {
             $cart[$id]['quantity'] += $qty;
         } else {
+            $firstImage = $product->images->first()?->img_path ?? 'icons/img.svg';
+
             $cart[$id] = [
-                'id'       => $id,
-                'title'    => $product->title,
-                'artist'   => $product->artist?->name ?? '',
-                'price'    => (float) $product->price,
-                'image'    => $product->image,
+                'id' => $id,
+                'title' => $product->title,
+                'artist' => $product->artist?->name ?? '',
+                'price' => (float) $product->price,
+                'image' => $firstImage,
                 'quantity' => $qty,
             ];
         }

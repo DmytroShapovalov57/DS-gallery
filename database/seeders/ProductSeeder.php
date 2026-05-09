@@ -4,25 +4,30 @@ namespace Database\Seeders;
 
 use App\Models\Artist;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Database\Seeder;
+
 
 class ProductSeeder extends Seeder
 {
+    private function addImages(Product $product, string $img_path, int $count = 3): void
+    {
+        for ($i = 0; $i < $count; $i++) {
+            ProductImage::create([
+                'product_id' => $product->product_id,
+                'img_path' => $img_path,
+                'order' => $i,
+            ]);
+        }
+    }
+
     public function run(): void
     {
-        $vangogh = Artist::firstOrCreate([
-            'name' => 'Vincent van Gogh'
-        ]);
+        $vangogh = Artist::firstOrCreate(['name' => 'Vincent van Gogh']);
+        $picasso = Artist::firstOrCreate(['name' => 'Pablo Picasso']);
+        $raphael = Artist::firstOrCreate(['name' => 'Raphael']);
 
-        $picasso = Artist::firstOrCreate([
-            'name' => 'Pablo Picasso'
-        ]);
-
-        $raphael = Artist::firstOrCreate([
-            'name' => 'Raphael'
-        ]);
-
-        $products = [
+        $datas = [
             // VAN GOGH
             [
                 'title' => 'Bridges Across the Seine at Asnières',
@@ -451,14 +456,8 @@ class ProductSeeder extends Seeder
                 'image' => 'images/art/picasso/woman-with-hat-1962-1.jpg',
                 'description' => 'A later work featuring bold colors and expressive lines.',
             ],
-        ];
 
-        foreach ($products as $product) {
-            Product::create($product);
-        }
-
-        // TOOLS
-        $tools = [
+            // TOOLS
             [
                 'title' => 'Professional Brushes Set',
                 'artist_id' => null,
@@ -561,8 +560,14 @@ class ProductSeeder extends Seeder
             ],
         ];
 
-        foreach ($tools as $tool) {
-            Product::create($tool);
+
+        foreach ($datas as $data) {
+            $img_path = $data['image'];
+            unset($data['image']);
+
+            $product = Product::create($data);
+
+            $this->addImages($product, $img_path);
         }
     }
 }

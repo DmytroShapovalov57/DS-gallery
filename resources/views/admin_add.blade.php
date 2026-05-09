@@ -76,10 +76,10 @@
                     <div>
                         <div class="muted-label mb-1">CATEGORY</div>
                         <select class="edit-input" name="category" style="cursor:pointer">
-                            <option value="product" {{ old('category', $product->category ?? 'product') === 'product' ? 'selected' : '' }}>
-                                product
+                            <option value="product" {{ old('category', $product->category) === 'artwork' ? 'selected' : '' }}>
+                                Artwork
                             </option>
-                            <option value="tool" {{ old('category', $product->category ?? '') === 'tool' ? 'selected' : '' }}>
+                            <option value="tool" {{ old('category', $product->category) === 'tool' ? 'selected' : '' }}>
                                 Tool
                             </option>
                         </select>

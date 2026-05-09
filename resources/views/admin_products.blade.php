@@ -18,7 +18,7 @@
     <div class="d-flex flex-grow-1">
 
         <!-- Sort panel -->
-        <form method="GET" action="{{ route('products') }}" id="filterForm">
+        <form method="GET" action="{{ route('admin.products') }}" id="filterForm">
             @if(request('search'))
                 <input type="hidden" name="search" value="{{ request('search') }}"/>
             @endif
@@ -51,7 +51,7 @@
                            min="{{ $minPrice }}" max="{{ $maxPrice }}" style="width:80px"/>
                 </div>
 
-                @if($category === 'product')
+                @if($category === 'artwork')
                     {{-- products: Year, Genre, Artist --}}
                     <p class="muted-label">YEAR</p>
                     <div class="d-flex gap-1 mb-2">
@@ -101,7 +101,7 @@
                 @endif
 
                 <button type="submit" class="btn btn-dark btn-sm w-100 mb-1">Apply</button>
-                <a href="{{ route('products', ['category' => $category]) }}"
+                <a href="{{ route('admin.products', ['category' => $category]) }}"
                    class="btn btn-outline-secondary btn-sm w-100">Reset</a>
             </div>
         </form>
@@ -109,15 +109,15 @@
         <main class="p-4 flex-grow-1" style="overflow-y:auto">
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h1 class="mb-0">products</h1>
+                <h1 class="mb-0">Products</h1>
             </div>
 
             <div class="d-flex gap-2 mb-4">
-                <a href="{{ route('products', array_merge(request()->except(['category','page']), ['category' => 'product'])) }}"
-                   class="mid-btn {{ $category === 'product' ? 'active' : '' }}">
-                    products
+                <a href="{{ route('admin.products', array_merge(request()->except(['category','page']), ['category' => 'artwork'])) }}"
+                   class="mid-btn {{ $category === 'artwork' ? 'active' : '' }}">
+                    Artworks
                 </a>
-                <a href="{{ route('products', array_merge(request()->except(['category','page']), ['category' => 'tool'])) }}"
+                <a href="{{ route('admin.products', array_merge(request()->except(['category','page']), ['category' => 'tool'])) }}"
                    class="mid-btn {{ $category === 'tool' ? 'active' : '' }}">
                     Tools
                 </a>
@@ -126,7 +126,7 @@
             @if(request('search'))
                 <p class="text-muted small mb-3">
                     Search: <strong>{{ request('search') }}</strong>
-                    <a href="{{ route('products', request()->except('search')) }}" class="ms-2 text-dark">✕ clear</a>
+                    <a href="{{ route('admin.products', request()->except('search')) }}" class="ms-2 text-dark">✕ clear</a>
                 </p>
             @endif
 
@@ -143,7 +143,9 @@
                     <div class="col">
                         <figure class="card p-0 h-100">
                             <a class="img-card" style="height:260px" href="{{ route('admin.detail', $product) }}">
-                                <img class="art-image" src="{{ asset($product->image) }}" alt="{{ $product->title }}"/>
+                                @php $firstImage = $product->images->first()?->img_path; @endphp
+
+                                <img class="art-image" src="{{ asset($firstImage) }}" alt="{{ $product->title }}"/>
 
                                 <!-- Delete button -->
                                 <form method="POST" action="{{ route('admin.destroy', $product) }}"

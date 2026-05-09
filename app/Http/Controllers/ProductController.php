@@ -10,7 +10,7 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $category = $request->get('category', 'product');
+        $category = $request->get('category', 'artwork');
         $query = Product::with('artist')->where('category', $category);
 
         if ($search = $request->get('search')) {
@@ -85,6 +85,7 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
+        $product->load('images');
         return view('detail', compact('product'));
     }
 }

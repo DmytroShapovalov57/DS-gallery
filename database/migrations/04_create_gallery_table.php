@@ -23,10 +23,9 @@ return new class extends Migration {
             $table->string('title');
             $table->integer('year')->nullable();
             $table->string('genre')->nullable();
-            $table->string('category')->default('product');
+            $table->string('category')->default('artwork');
             $table->integer('price')->default(0);
             $table->text('description')->nullable();
-            $table->string('image')->nullable();
             $table->timestamps();
 
             $table->foreignId('artist_id')->nullable()->references('artist_id')->on('DS_Artists')->cascadeOnDelete();
@@ -92,10 +91,24 @@ return new class extends Migration {
             $table->foreign('user_id')->references('id')->on('DS_Users')->cascadeOnDelete();
             $table->foreign('product_id')->references('product_id')->on('DS_Products')->cascadeOnDelete();
         });
+
+        // 7. Product images (depends on products)
+        Schema::create('DS_ProductImages', function (Blueprint $table) {
+            $table->unsignedBigInteger('product_id');
+            $table->string('img_path');
+            $table->integer('order')->default(0);
+            $table->timestamps();
+
+            $table->foreign('product_id')
+                ->references('product_id')
+                ->on('DS_Products')
+                ->cascadeOnDelete();
+        });
     }
 
     public function down(): void
     {
+        Schema::dropIfExists('DS_ProductImages');
         Schema::dropIfExists('DS_SaveItems');
         Schema::dropIfExists('DS_CartItems');
         Schema::dropIfExists('DS_OrderItems');
