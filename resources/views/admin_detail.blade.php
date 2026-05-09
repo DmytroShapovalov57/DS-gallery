@@ -12,12 +12,8 @@
 @include('header')
 
 <div class="d-flex flex-grow-1">
-    <aside>
-        <nav>
-            <a class="side-link" href="{{ route('home') }}">Home</a>
-            <a class="side-link active" href="{{ route('admin.artworks') }}">Artworks</a>
-        </nav>
-    </aside>
+
+    @include('sidebar')
 
     <main class="p-4 overflow-y-auto flex-grow-1">
 
@@ -28,12 +24,6 @@
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
-            </div>
-        @endif
-
-        @if(session('success'))
-            <div class="alert alert-success py-2 mb-3" style="font-size:13px">
-                {{ session('success') }}
             </div>
         @endif
 

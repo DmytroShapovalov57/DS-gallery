@@ -51,10 +51,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/account/password', [AccountController::class, 'updatePassword'])->name('account.password');
 });
 
-// Admin auth
-Route::get('/admin', [AdminAuthController::class, 'showLogin'])->name('admin.login');
-Route::post('/admin/login',[AdminAuthController::class, 'login'])->name('admin.login.post');
-Route::post('/admin/logout',[AdminAuthController::class, 'logout'])->name('admin.logout');
 
 // Admin panel
 Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {

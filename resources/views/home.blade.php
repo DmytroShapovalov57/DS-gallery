@@ -12,12 +12,8 @@
 @include('header')
 
 <div class="d-flex flex-grow-1">
-    <aside>
-        <nav>
-            <a class="side-link active" href="{{ route('home') }}">Home</a>
-            <a class="side-link" href="{{ route('artworks') }}">Artworks</a>
-        </nav>
-    </aside>
+
+    @include('sidebar')
 
     <main class="p-4 overflow-y-auto flex-grow-1">
 
@@ -55,7 +51,7 @@
                     <div class="col">
                         <figure class="card p-0">
                             <a class="img-card" style="height:300px" href="{{ route('detail', $artwork) }}">
-                                <img class="art-image" src="{{ $artwork->image }}" alt="{{ $artwork->title }}"/>
+                                <img class="art-image" src="{{ asset($artwork->image) }}" alt="{{ $artwork->title }}"/>
                                 <div class="tile-btns">
                                     <form method="POST" action="{{ route('cart.add', $artwork) }}">
                                         @csrf

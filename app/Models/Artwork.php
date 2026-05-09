@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Artwork extends Model
 {
+    protected $table = 'DS_Artworks';
     protected $primaryKey = 'artwork_id';
 
     protected $fillable = [

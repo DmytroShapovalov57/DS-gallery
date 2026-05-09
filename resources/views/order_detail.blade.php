@@ -12,20 +12,10 @@
 @include('header')
 
 <div class="d-flex flex-grow-1">
-    <aside>
-        <nav>
-            <a class="side-link" href="{{ route('home') }}">Home</a>
-            <a class="side-link" href="{{ route('artworks') }}">Artworks</a>
-        </nav>
-    </aside>
+
+    @include('sidebar')
 
     <main class="p-4 flex-grow-1" style="overflow-y:auto">
-
-        @if (session('success'))
-            <div class="alert alert-success py-3 mb-4" style="font-size:14px">
-                {{ session('success') }}
-            </div>
-        @endif
 
         <div class="text-center py-4 mb-4 border rounded-1">
             <div style="font-size:48px;line-height:1">✓</div>

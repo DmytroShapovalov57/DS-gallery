@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         // 1. Artists
-        Schema::create('artists', function (Blueprint $table) {
+        Schema::create('DS_Artists', function (Blueprint $table) {
             $table->id('artist_id');
             $table->string('name');
             $table->integer('year')->nullable();
@@ -18,7 +18,7 @@ return new class extends Migration {
         });
 
         // 2. Artworks (depends on artists)
-        Schema::create('artworks', function (Blueprint $table) {
+        Schema::create('DS_Artworks', function (Blueprint $table) {
             $table->id('artwork_id');
             $table->string('title');
             $table->integer('year')->nullable();
@@ -29,11 +29,11 @@ return new class extends Migration {
             $table->string('image')->nullable();
             $table->timestamps();
 
-            $table->foreignId('artist_id')->nullable()->references('artist_id')->on('artists')->cascadeOnDelete();
+            $table->foreignId('artist_id')->nullable()->references('artist_id')->on('DS_Artists')->cascadeOnDelete();
         });
 
         // 3. Orders (depends on users)
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('DS_Orders', function (Blueprint $table) {
             $table->id('order_id');
             $table->unsignedBigInteger('user_id');
             $table->string('status')->default('pending');
@@ -51,11 +51,11 @@ return new class extends Migration {
             $table->string('address2')->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('user_id')->references('id')->on('DS_Users')->cascadeOnDelete();
         });
 
         // 4. Order items (depends on orders + artworks)
-        Schema::create('order_items', function (Blueprint $table) {
+        Schema::create('DS_OrderItems', function (Blueprint $table) {
             $table->id('order_item_id');
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('artwork_id');
@@ -66,41 +66,41 @@ return new class extends Migration {
             $table->unsignedInteger('price')->default(0);
             $table->timestamps();
 
-            $table->foreign('order_id')->references('order_id')->on('orders')->cascadeOnDelete();
-            $table->foreign('artwork_id')->references('artwork_id')->on('artworks')->cascadeOnDelete();
+            $table->foreign('order_id')->references('order_id')->on('DS_Orders')->cascadeOnDelete();
+            $table->foreign('artwork_id')->references('artwork_id')->on('DS_Artworks')->cascadeOnDelete();
         });
 
         // 5. Cart items (depends on users + artworks)
-        Schema::create('cart_items', function (Blueprint $table) {
+        Schema::create('DS_CartItems', function (Blueprint $table) {
             $table->id('cart_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('artwork_id');
             $table->integer('quantity')->default(1);
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
-            $table->foreign('artwork_id')->references('artwork_id')->on('artworks')->cascadeOnDelete();
+            $table->foreign('user_id')->references('id')->on('DS_Users')->cascadeOnDelete();
+            $table->foreign('artwork_id')->references('artwork_id')->on('DS_Artworks')->cascadeOnDelete();
         });
 
         // 6. Save items (depends on users + artworks)
-        Schema::create('save_items', function (Blueprint $table) {
+        Schema::create('DS_SaveItems', function (Blueprint $table) {
             $table->id('save_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('artwork_id');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
-            $table->foreign('artwork_id')->references('artwork_id')->on('artworks')->cascadeOnDelete();
+            $table->foreign('user_id')->references('id')->on('DS_Users')->cascadeOnDelete();
+            $table->foreign('artwork_id')->references('artwork_id')->on('DS_Artworks')->cascadeOnDelete();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('save_items');
-        Schema::dropIfExists('cart_items');
-        Schema::dropIfExists('order_items');
-        Schema::dropIfExists('orders');
-        Schema::dropIfExists('artworks');
-        Schema::dropIfExists('artists');
+        Schema::dropIfExists('DS_SaveItems');
+        Schema::dropIfExists('DS_CartItems');
+        Schema::dropIfExists('DS_OrderItems');
+        Schema::dropIfExists('DS_Orders');
+        Schema::dropIfExists('DS_Artworks');
+        Schema::dropIfExists('DS_Artists');
     }
 };

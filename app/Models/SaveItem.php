@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SaveItem extends Model
 {
+    protected $table = 'DS_SaveItems';
     protected $primaryKey = 'save_id';
 
     protected $fillable = ['user_id', 'artwork_id'];

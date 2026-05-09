@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CartItem extends Model
 {
+    protected $table = 'DS_CartItem';
     protected $primaryKey = 'cart_id';
 
     protected $fillable = ['user_id', 'artwork_id', 'quantity'];

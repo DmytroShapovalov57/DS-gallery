@@ -11,19 +11,11 @@
 
 @include('header')
 <div class="d-flex flex-grow-1">
-    <aside>
-        <nav>
-            <a class="side-link" href="{{ route('home') }}">Home</a>
-            <a class="side-link" href="{{ route('artworks') }}">Artworks</a>
-        </nav>
-    </aside>
+
+    @include('sidebar')
 
     <main class="p-4 overflow-y-auto flex-grow-1">
         <h1>Saved</h1>
-
-        @if (session('success'))
-            <div class="alert alert-success py-2 mb-3" style="font-size:13px">{{ session('success') }}</div>
-        @endif
 
         @if ($saved->isEmpty())
             <div class="text-center py-5 text-muted">
@@ -36,7 +28,7 @@
                     <div class="col">
                         <figure class="card p-0 h-100">
                             <a class="img-card tile-img" href="{{ route('detail', $artwork) }}">
-                                <img class="art-image" src="{{ $artwork->image }}" alt="{{ $artwork->title }}"/>
+                                <img class="art-image" src="{{ asset($artwork->image) }}" alt="{{ $artwork->title }}"/>
                                 <div class="tile-btns">
                                     {{-- Add to cart --}}
                                     <form method="POST" action="{{ route('cart.add', $artwork) }}">

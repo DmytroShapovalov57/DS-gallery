@@ -13,15 +13,11 @@
 
 <div class="d-flex flex-grow-1">
 
-    <aside>
-        <nav>
-            <a class="side-link" href="{{ route('home') }}">Home</a>
-            <a class="side-link active" href="{{ route('artworks') }}">Artworks</a>
-        </nav>
-    </aside>
+    @include('sidebar')
 
     <div class="d-flex flex-grow-1">
 
+        <!-- Sort panel -->
         <form method="GET" action="{{ route('artworks') }}" id="filterForm">
             @if(request('search'))
                 <input type="hidden" name="search" value="{{ request('search') }}"/>
@@ -112,6 +108,10 @@
 
         <main class="p-4 flex-grow-1" style="overflow-y:auto">
 
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h1 class="mb-0">Artworks</h1>
+            </div>
+
             <div class="d-flex gap-2 mb-4">
                 <a href="{{ route('artworks', array_merge(request()->except(['category','page']), ['category' => 'artwork'])) }}"
                    class="mid-btn {{ $category === 'artwork' ? 'active' : '' }}">
@@ -121,10 +121,6 @@
                    class="mid-btn {{ $category === 'tool' ? 'active' : '' }}">
                     Tools
                 </a>
-            </div>
-
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h1 class="mb-0">Artworks</h1>
             </div>
 
             @if(request('search'))
@@ -145,7 +141,7 @@
                         <div class="col">
                             <figure class="card p-0 h-100">
                                 <a class="img-card" style="height:300px" href="{{ route('detail', $artwork) }}">
-                                    <img class="art-image" src="{{ $artwork->image }}" alt="{{ $artwork->title }}"/>
+                                    <img class="art-image" src="{{ asset($artwork->image) }}" alt="{{ $artwork->title }}"/>
                                     <div class="tile-btns">
                                         <form method="POST" action="{{ route('cart.add', $artwork) }}">
                                             @csrf

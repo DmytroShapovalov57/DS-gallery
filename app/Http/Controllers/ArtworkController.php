@@ -10,10 +10,8 @@ class ArtworkController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Artwork::query()->with('artist');
-
         $category = $request->get('category', 'artwork');
-        $query->where('category', $category);
+        $query = Artwork::with('artist')->where('category', $category);
 
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search) {
@@ -81,16 +79,8 @@ class ArtworkController extends Controller
         $minYear  = (int) Artwork::where('category', $category)->whereNotNull('year')->min('year');
         $maxYear  = (int) Artwork::where('category', $category)->whereNotNull('year')->max('year');
 
-        return view('artworks', compact(
-            'artworks',
-            'genres',
-            'artists',
-            'minPrice',
-            'maxPrice',
-            'minYear',
-            'maxYear',
-            'category'
-        ));
+        return view('artworks', compact('artworks', 'genres', 'artists', 'minPrice',
+            'maxPrice', 'minYear', 'maxYear', 'category'));
     }
 
     public function show(Artwork $artwork)

@@ -13,21 +13,9 @@
 
 <div class="d-flex flex-grow-1">
 
-    <aside>
-        <nav>
-            <a class="side-link" href="{{ route('home') }}">Home</a>
-            <a class="side-link active" href="{{ route('artworks') }}">Artworks</a>
-        </nav>
-    </aside>
+    @include('sidebar')
 
     <main class="p-4 overflow-y-auto flex-grow-1">
-
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible py-2 mb-3" style="font-size:13px">
-                {{ session('success') }}
-                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
 
         <h1>{{ $artwork->title }}</h1>
 
@@ -37,7 +25,7 @@
             <div class="col-12 col-md-8">
                 <div class="border rounded-1 overflow-hidden">
                     <div class="img-card" style="height:500px">
-                        <img class="art-image" src="{{ $artwork->image }}"
+                        <img class="art-image" src="{{ asset($artwork->image) }}"
                              alt="{{ $artwork->title }}" style="object-fit:contain"/>
                     </div>
                 </div>
@@ -45,18 +33,27 @@
 
             <!-- Meta and add-to-cart -->
             <div class="col-12 col-md-4 d-flex flex-column gap-4 pt-2">
-                <div>
-                    <div class="muted-label">ARTIST</div>
-                    <div class="detail-value">{{ $artwork->artist->name }}</div>
-                </div>
-                <div>
-                    <div class="muted-label">DATE</div>
-                    <div class="detail-value">{{ $artwork->year }}</div>
-                </div>
-                <div>
-                    <div class="muted-label">GENRE</div>
-                    <div class="detail-value">{{ $artwork->genre }}</div>
-                </div>
+                @if($artwork->artist)
+                    <div>
+                        <div class="muted-label">ARTIST</div>
+                        <div class="detail-value">{{ $artwork->artist->name }}</div>
+                    </div>
+                @endif
+
+                @if($artwork->year)
+                    <div>
+                        <div class="muted-label">DATE</div>
+                        <div class="detail-value">{{ $artwork->year }}</div>
+                    </div>
+                @endif
+
+                @if($artwork->genre)
+                    <div>
+                        <div class="muted-label">{{ $artwork->category === 'tool' ? 'TYPE' : 'GENRE' }}</div>
+                        <div class="detail-value">{{ $artwork->genre }}</div>
+                    </div>
+                @endif
+
                 <div>
                     <div class="muted-label">PRICE</div>
                     <div class="detail-value" style="font-size:22px">
@@ -64,40 +61,44 @@
                     </div>
                 </div>
 
-                <div class="border-top pt-3 d-flex flex-column gap-2">
+                <div class="border-top pt-3 d-flex flex-column align-items-start gap-2">
 
-                    <form id="detail-form" method="POST" action="{{ route('cart.add', $artwork) }}">
-                        @csrf
-                        @php $isSaved = in_array($artwork->artwork_id, session('saved', [])); @endphp
-                        <input id="qty" name="quantity" type="hidden" value="1"/>
+                    {{-- Qty --}}
+                    <div class="qty-control" style="width: 104px;">
+                        <button type="button" class="qty-btn"
+                                onclick="let i=document.getElementById('detail-qty');let d=document.getElementById('detail-qty-display');i.value=Math.max(1,+i.value-1);d.textContent=i.value">−</button>
+                        <span id="detail-qty-display" class="qty-num d-flex align-items-center justify-content-center" style="font-size:14px; flex-grow: 1;">1</span>
+                        <button type="button" class="qty-btn"
+                                onclick="let i=document.getElementById('detail-qty');let d=document.getElementById('detail-qty-display');i.value=+i.value+1;d.textContent=i.value">+</button>
+                    </div>
 
-                        <!-- − 1 + -->
-                        <div class="d-flex align-items-center gap-1 mb-2" style="width:100px">
-                            <button type="button" class="sm-icon-btn" style="width:100%"
-                                    onclick="let i=document.getElementById('qty');let d=document.getElementById('qty-display');i.value=Math.max(1,+i.value-1);d.textContent=i.value">−</button>
-                            <span id="qty-display" class="text-center" style="font-size:16px;min-width:20px">1</span>
-                            <button type="button" class="sm-icon-btn" style="width:100%"
-                                    onclick="let i=document.getElementById('qty');let d=document.getElementById('qty-display');i.value=+i.value+1;d.textContent=i.value">+</button>
-                        </div>
+                    {{-- Cart + Saved --}}
+                    @php $isSaved = in_array($artwork->artwork_id, session('saved', [])); @endphp
+                    <div class="d-flex gap-2" style="width: 104px;">
 
-                        <!-- Cart + Saved -->
-                        <div class="d-flex gap-2" style="width:100px">
-                            <button type="submit" class="sm-icon-btn" style="width:100%"
-                                    onclick="document.getElementById('detail-form').action='{{ route('cart.add', $artwork) }}'">
+                        <form method="POST" action="{{ route('cart.add', $artwork) }}" style="flex: 1;">
+                            @csrf
+                            <input id="detail-qty" name="quantity" type="hidden" value="1"/>
+                            <button type="submit" class="sm-icon-btn" style="width: 100%;">
                                 <img src="{{ asset('icons/cart.svg') }}" alt="Add to cart"/>
                             </button>
-                            <button type="submit" class="sm-icon-btn {{ $isSaved ? 'in-saved' : '' }}" style="width:100%"
-                                    onclick="document.getElementById('detail-form').action='{{ route('saved.toggle', $artwork) }}'">
+                        </form>
+
+                        <form method="POST" action="{{ route('saved.toggle', $artwork) }}" style="flex: 1;">
+                            @csrf
+                            <button type="submit" class="sm-icon-btn {{ $isSaved ? 'in-saved' : '' }}" style="width: 100%;">
                                 <img src="{{ asset('icons/bookmark.svg') }}" alt="Save"/>
                             </button>
-                        </div>
+                        </form>
 
-                    </form>
+                    </div>
 
+                    {{-- Go back --}}
                     <div class="d-flex">
-                        <a class="mid-btn" style="border-width:2px;width:100px;height:28px"
+                        <a class="mid-btn" style="border-width:2px; width: 104px; height: 28px;"
                            href="{{ route('artworks') }}">Go back</a>
                     </div>
+
                 </div>
             </div>
         </div>

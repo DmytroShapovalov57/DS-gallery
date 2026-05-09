@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Artist extends Model
 {
+    protected $table = 'DS_Artists';
     protected $primaryKey = 'artist_id';
 
     protected $fillable = ['name', 'year', 'description', 'img_path'];

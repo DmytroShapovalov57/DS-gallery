@@ -13,19 +13,10 @@
 
 <div class="d-flex flex-grow-1">
 
-    <aside>
-        <nav>
-            <a class="side-link" href="{{ route('home') }}">Home</a>
-            <a class="side-link" href="{{ route('artworks') }}">Artworks</a>
-        </nav>
-    </aside>
+    @include('sidebar')
 
     <main class="p-4 flex-grow-1" style="min-width:0;overflow-y:auto">
         <h1>Cart</h1>
-
-        @if (session('success'))
-            <div class="alert alert-success py-2 mb-3" style="font-size:13px">{{ session('success') }}</div>
-        @endif
 
         @if (empty($cart))
             <div class="text-center py-5 text-muted">
@@ -55,13 +46,15 @@
                             <form method="POST" action="{{ route('cart.update', $id) }}">
                                 @csrf
                                 <div class="qty-control">
-                                    <button type="submit" name="quantity" value="{{ $item['quantity'] - 1 }}" class="qty-btn">−</button>
+                                    <button type="button" class="qty-btn"
+                                            onclick="let i=this.parentNode.querySelector('input'); i.value=Math.max(1, +i.value-1); this.form.submit()">−</button>
 
                                     <input class="qty-num" type="number" name="quantity"
                                            value="{{ $item['quantity'] }}" min="1"
                                            onchange="this.form.submit()"/>
 
-                                    <button type="submit" name="quantity" value="{{ $item['quantity'] + 1 }}" class="qty-btn">+</button>
+                                    <button type="button" class="qty-btn"
+                                            onclick="let i=this.parentNode.querySelector('input'); i.value=+i.value+1; this.form.submit()">+</button>
                                 </div>
                             </form>
                         </div>

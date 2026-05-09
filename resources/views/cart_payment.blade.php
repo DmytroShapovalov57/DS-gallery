@@ -12,12 +12,8 @@
 @include('header')
 
 <div class="d-flex flex-grow-1">
-    <aside>
-        <nav>
-            <a class="side-link" href="{{ route('home') }}">Home</a>
-            <a class="side-link" href="{{ route('artworks') }}">Artworks</a>
-        </nav>
-    </aside>
+
+    @include('sidebar')
 
     <main class="d-flex justify-content-center p-4 flex-grow-1">
         <div style="width:100%;max-width:500px">

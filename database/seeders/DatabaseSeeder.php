@@ -11,11 +11,19 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
     public function run(): void
     {
-        // User::factory(10)->create();
 
         User::factory()->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
+            'email' => 'test@dsgallery.com',
+            'password' => bcrypt('12345678'),
+            'is_admin' => false,
+        ]);
+
+        User::factory()->create([
+            'name'     => 'Admin',
+            'email'    => 'admin@dsgallery.com',
+            'password' => bcrypt('12345678'),
+            'is_admin' => true,
         ]);
 
         $this->call([
