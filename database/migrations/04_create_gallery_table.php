@@ -11,8 +11,9 @@ return new class extends Migration {
         Schema::create('DS_Artists', function (Blueprint $table) {
             $table->id('artist_id');
             $table->string('name');
-            $table->integer('year')->nullable();
-            $table->text('description')->nullable();
+            $table->integer('year_born')->nullable();
+            $table->integer('year_death')->nullable();
+            $table->text('bio')->nullable();
             $table->string('img_path')->nullable();
             $table->timestamps();
         });
@@ -94,6 +95,7 @@ return new class extends Migration {
 
         // 7. Product images (depends on products)
         Schema::create('DS_ProductImages', function (Blueprint $table) {
+            $table->id('image_id');
             $table->unsignedBigInteger('product_id');
             $table->string('img_path');
             $table->integer('order')->default(0);

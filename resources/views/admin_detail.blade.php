@@ -47,8 +47,8 @@
                                              alt="Product image">
 
                                         <div class="mt-2">
-                                            <input type="checkbox" name="remove_images[]" value="{{ $image->id }}" id="img_{{ $image->id }}">
-                                            <label for="img_{{ $image->id }}" class="small text-danger" style="cursor:pointer">
+                                            <input type="checkbox" name="remove_images[]" value="{{ $image->image_id }}" id="img_{{ $image->image_id }}">
+                                            <label for="img_{{ $image->image_id }}" class="small text-danger" style="cursor:pointer">
                                                 Remove
                                             </label>
                                         </div>

@@ -95,9 +95,9 @@ class AdminProductController extends Controller
     {
         $data = $request->validate([
             'title' => 'required|string|max:255',
-            'artist' => 'required|string|max:255',
-            'year' => 'required|integer|min:1000|max:2100',
-            'genre' => 'required|string|max:100',
+            'artist' => 'nullable|required|string|max:255',
+            'year' => 'nullable|required|integer|max:2100',
+            'genre' => 'nullable|required|string|max:100',
             'category' => 'required|in:artwork,tool',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
@@ -105,29 +105,38 @@ class AdminProductController extends Controller
             'images.*' => 'image|max:4096',
         ]);
 
-        $product = Product::create($data);
+        $artist = Artist::firstOrCreate(['name' => $data['artist']]);
+        $product = Product::create([
+            'title' => $data['title'],
+            'artist_id' => $artist->artist_id,
+            'year' => $data['year'],
+            'genre' => $data['genre'],
+            'category' => $data['category'],
+            'price'=> $data['price'],
+            'description' => $data['description'] ?? null,
+        ]);
+
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $index => $file) {
                 $path = $file->store('images/art/uploads', 'public');
                 $product->images()->create([
                     'img_path' => 'storage/' . $path,
-                    'order'    => $index
+                    'order' => $index
                 ]);
             }
         }
 
-        return redirect()->route('admin.products')
-            ->with('success', 'Product created with images.');
+        return redirect()->route('admin.products');
     }
 
     public function update(Request $request, Product $product)
     {
         $data = $request->validate([
             'title' => 'required|string|max:255',
-            'artist' => 'required|string|max:255',
-            'year' => 'required|integer|min:1000|max:2100',
-            'genre' => 'required|string|max:100',
+            'artist' => 'nullable|required|string|max:255',
+            'year' => 'nullable|required|integer|max:2100',
+            'genre' => 'nullable|required|string|max:100',
             'category' => 'required|in:artwork,tool',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
@@ -136,14 +145,22 @@ class AdminProductController extends Controller
             'remove_images' => 'nullable|array',
         ]);
 
-        $artist = Artist::firstOrCreate(['name' => $data['artist']]);
-        $data['artist_id'] = $artist->id;
+        $artist = $data['artist'] ? Artist::firstOrCreate(['name' => $data['artist']]) : null;
+        $data['artist_id'] = $artist->artist_id;
 
-        $product->update($data);
+        $product->update([
+            'title' => $data['title'],
+            'artist_id' => $artist?->artist_id,
+            'year' => $data['year'],
+            'genre' => $data['genre'],
+            'category' => $data['category'],
+            'price' => $data['price'],
+            'description' => $data['description'] ?? null,
+        ]);
 
         // Delete selected images
         if ($request->filled('remove_images')) {
-            ProductImage::whereIn('id', $request->remove_images)->delete();
+            ProductImage::whereIn('image_id', $request->remove_images)->delete();
         }
 
         // Upload new images

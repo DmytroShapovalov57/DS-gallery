@@ -16,21 +16,10 @@
     @include('sidebar')
 
     <main class="p-4 overflow-y-auto flex-grow-1">
-
-        @if ($errors->any())
-            <div class="alert alert-danger py-2 mb-3" style="font-size:13px">
-                <ul class="mb-0 ps-3">
-                    @foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach
-                </ul>
-            </div>
-        @endif
-
-        <form method="POST" action="{{ route('admin.store') }}"
-              enctype="multipart/form-data">
+        <form method="POST" action="{{ route('admin.store') }}" enctype="multipart/form-data">
             @csrf
 
             <div class="row g-4 align-items-start">
-
                 <!-- Image upload -->
                 <div class="col-12 col-md-8">
                     <label class="img-upload w-100" id="uploadLabel" style="cursor:pointer">
@@ -38,14 +27,13 @@
                         <span id="uploadText">Click to upload image</span>
                         <img id="imagePreview" src="#" alt="Preview"
                              style="display:none;width:100%;height:100%;object-fit:contain"/>
-                        <input type="file" name="image" accept="image/*" style="display:none"
+                        <input type="file" name="images[]" class="form-control" accept="image/*" style="display:none"
                                onchange="previewImg(this)"/>
                     </label>
                 </div>
 
                 <!-- Fields -->
                 <div class="col-12 col-md-4 d-flex flex-column gap-4">
-
                     <div>
                         <div class="muted-label mb-1">TITLE</div>
                         <input class="edit-input" type="text" name="title"
@@ -61,12 +49,12 @@
                     <div>
                         <div class="muted-label mb-1">DATE</div>
                         <input class="edit-input" type="number" name="year"
-                               placeholder="1888" value="{{ old('year') }}" min="1000" max="2100" required/>
+                               placeholder="1888" value="{{ old('year') }}" required/>
                     </div>
 
                     <div>
                         <div class="muted-label mb-1">GENRE</div>
-                        <input class="edit-input" type="text" name="genre"
+                            <input class="edit-input" type="text" name="genre"
                                list="genreList" placeholder="Impressionism" value="{{ old('genre') }}" required/>
                         <datalist id="genreList">
                             @foreach ($genres as $g)<option value="{{ $g }}">@endforeach
@@ -76,10 +64,10 @@
                     <div>
                         <div class="muted-label mb-1">CATEGORY</div>
                         <select class="edit-input" name="category" style="cursor:pointer">
-                            <option value="product" {{ old('category', $product->category) === 'artwork' ? 'selected' : '' }}>
+                            <option value="artwork" {{ old('category') === 'artwork' ? 'selected' : '' }}>
                                 Artwork
                             </option>
-                            <option value="tool" {{ old('category', $product->category) === 'tool' ? 'selected' : '' }}>
+                            <option value="tool" {{ old('category') === 'tool' ? 'selected' : '' }}>
                                 Tool
                             </option>
                         </select>
@@ -88,7 +76,7 @@
                     <div>
                         <div class="muted-label mb-1">PRICE (€)</div>
                         <input class="edit-input" type="number" name="price" step="0.01"
-                               placeholder="0" value="{{ old('price') }}" min="0" required/>
+                               placeholder="0" value="{{ old('price') }}" required/>
                     </div>
 
                     <div>
@@ -102,8 +90,8 @@
                         <a class="mid-btn" href="{{ route('admin.products') }}">Cancel</a>
                         <button type="submit" class="btn btn-dark btn-sm flex-grow-1">Save product</button>
                     </div>
-
                 </div>
+
             </div>
         </form>
     </main>

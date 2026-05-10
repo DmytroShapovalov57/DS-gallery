@@ -1,3 +1,4 @@
+@php use App\Models\Product; @endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,10 +22,10 @@
             <h1>News from the world of art</h1>
             <article class="news-card border rounded-1 p-4">
                 <div>
-                    <h2 style="font-size:20px;font-weight:500;margin-bottom:14px;line-height:1.4">
+                    <h2 style="font-size:24px;font-weight:500;margin-bottom:14px;line-height:1.4">
                         Jeff Koons's Giant Play-Doh Sculpture Could Fetch 20€ Million at Christie's.
                     </h2>
-                    <p style="font-size:16px;line-height:1.75">
+                    <p style="font-size:20px;line-height:1.75">
                         When the Whitney Museum of American Art staged its blockbuster retrospective of Jeff Koons in
                         2014, the most photographed work was undeniably Play-Doh (1994–2014), an 11-foot-tall aluminum
                         sculpture that looked as if an artistic young giant had created a multicolored pile of clay and
@@ -44,7 +45,7 @@
         </section>
 
         <section class="mb-5">
-            <h1>product of the day</h1>
+            <h1>Artwork of the day</h1>
             <a class="day-wrap" href="{{ route('products') }}">
                 <img src="{{ asset('images/home/Girl_with_a_Pearl_Earring.jpg') }}" alt="Girl with a Pearl Earring"/>
             </a>
@@ -53,9 +54,7 @@
         <section class="mb-5">
             <h1>New Arrivals</h1>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
-                @php
-                    $newArrivals = \App\Models\Product::latest()->take(3)->get();
-                @endphp
+                @php $newArrivals = Product::latest()->take(3)->get(); @endphp
                 @foreach ($newArrivals as $product)
                     <div class="col">
                         <figure class="card p-0">
@@ -88,53 +87,24 @@
         <section>
             <h1>Our most famous artists</h1>
             <div class="d-flex flex-column">
+                @foreach ($artists as $artist)
 
                 <article class="border-top py-4">
                     <div class="row g-4">
                         <div class="col-12 col-md-7">
-                            <p style="font-size:18px">Vincent van Gogh (1853–1890) — a Dutch Post-Impressionist painter
-                                whose work marked a dramatic shift toward emotional expression and individuality in art,
-                                developing a highly distinctive style characterized by bold, vibrant colors and thick
-                                brushstrokes.</p>
+                            <p style="font-size:22px">
+                                {{$artist->name}} ({{$artist->year_born}}–{{$artist->year_death}}) — {{$artist->bio}}
+                            </p>
                         </div>
                         <div class="col-12 col-md-5">
                             <div class="img-card" style="height:350px">
-                                <img class="art-image" src="{{ asset('images/home/Van_Gogh.jpg') }}" alt=""/>
+                                <img class="art-image" src="{{ asset($artist->img_path) }}" alt="{{ $artist->name }}"/>
                             </div>
                         </div>
                     </div>
                 </article>
 
-                <article class="border-top py-4">
-                    <div class="row g-4">
-                        <div class="col-12 col-md-7">
-                            <p style="font-size:18px">Pablo Picasso (1881–1973) — a Spanish painter, sculptor, and one
-                                of the most influential artists of the 20th century, known for co-founding Cubism and
-                                masterpieces like "Guernica".</p>
-                        </div>
-                        <div class="col-12 col-md-5">
-                            <div class="img-card" style="height:350px">
-                                <img class="art-image" src="{{ asset('images/home/Picasso.jpg') }}" alt=""/>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="border-top py-4">
-                    <div class="row g-4">
-                        <div class="col-12 col-md-7">
-                            <p style="font-size:18px">Raphael (1483–1520) — an Italian painter and architect of the High
-                                Renaissance, widely regarded as one of the greatest artists in European history, known
-                                for "The School of Athens".</p>
-                        </div>
-                        <div class="col-12 col-md-5">
-                            <div class="img-card" style="height:350px">
-                                <img class="art-image" src="{{ asset('images/home/Raphael.jpg') }}" alt=""/>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-
+                @endforeach
             </div>
         </section>
 

@@ -23,9 +23,10 @@ class ProductSeeder extends Seeder
 
     public function run(): void
     {
-        $vangogh = Artist::firstOrCreate(['name' => 'Vincent van Gogh']);
-        $picasso = Artist::firstOrCreate(['name' => 'Pablo Picasso']);
-        $raphael = Artist::firstOrCreate(['name' => 'Raphael']);
+        $vangogh = Artist::where('name', 'Vincent van Gogh')->first();
+        $picasso = Artist::where('name', 'Pablo Picasso')->first();
+        $raphael = Artist::where('name', 'Raphael')->first();
+
 
         $datas = [
             // VAN GOGH

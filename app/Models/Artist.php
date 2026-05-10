@@ -9,7 +9,7 @@ class Artist extends Model
     protected $table = 'DS_Artists';
     protected $primaryKey = 'artist_id';
 
-    protected $fillable = ['name', 'year', 'description', 'img_path'];
+    protected $fillable = ['name', 'year_born', 'year_death', 'bio', 'img_path'];
 
     public function products()
     {
