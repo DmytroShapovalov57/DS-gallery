@@ -20,8 +20,9 @@
 
             <h1 class="mb-3">Log in</h1>
 
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="{{ route('login') }}" novalidate>
                 @csrf
+                @include('error')
 
                 <div class="mb-3">
                     <label class="form-label small fw-semibold">Email</label>
@@ -32,12 +33,6 @@
                     <label class="form-label small fw-semibold">Password</label>
                     <input class="form-control" type="password" name="password" placeholder="••••••••"/>
                 </div>
-
-                @if ($errors->any())
-                    <div class="alert alert-danger py-2 mb-3" style="font-size:13px">
-                        {{ $errors->first() }}
-                    </div>
-                @endif
 
                 <button type="submit" class="btn btn-dark w-100 mb-3">Log in</button>
             </form>

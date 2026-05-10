@@ -16,19 +16,10 @@
     @include('sidebar')
 
     <main class="p-4 overflow-y-auto flex-grow-1">
-
-        @if ($errors->any())
-            <div class="alert alert-danger py-2 mb-3" style="font-size:13px">
-                <ul class="mb-0 ps-3">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        @include('error')
 
         <!-- UPDATE FORM -->
-            <form method="POST" action="{{ route('admin.update', $product) }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('admin.update', $product) }}" enctype="multipart/form-data" novalidate>
                 @csrf
                 @method('PUT')
 
@@ -73,27 +64,27 @@
                         <div>
                             <div class="muted-label mb-1">TITLE</div>
                             <input class="edit-input" type="text" name="title"
-                                   value="{{ old('title', $product->title) }}" required/>
+                                   value="{{ old('title', $product->title) }}" />
                         </div>
 
                         <div>
                             <div class="muted-label mb-1">ARTIST</div>
                             <input class="edit-input" type="text" name="artist"
-                                   value="{{ old('artist', $product->artist?->name) }}" required/>
+                                   value="{{ old('artist', $product->artist?->name) }}" />
                         </div>
 
                         <div>
                             <div class="muted-label mb-1">DATE</div>
                             <input class="edit-input" type="number" name="year"
                                    value="{{ old('year', $product->year) }}"
-                                   min="1000" max="2100" required/>
+                                   min="1000" max="2100" />
                         </div>
 
                         <div>
                             <div class="muted-label mb-1">GENRE</div>
                             <input class="edit-input" type="text" name="genre"
                                    list="genreList"
-                                   value="{{ old('genre', $product->genre) }}" required/>
+                                   value="{{ old('genre', $product->genre) }}" />
                             <datalist id="genreList">
                                 @foreach ($genres as $g)
                                     <option value="{{ $g }}">
@@ -111,7 +102,7 @@
                         <div>
                             <div class="muted-label mb-1">PRICE (€)</div>
                             <input class="edit-input" type="number" name="price" step="0.01"
-                                   value="{{ old('price', $product->price) }}" min="0" required/>
+                                   value="{{ old('price', $product->price) }}" min="0" max="99999999"/>
                         </div>
 
                         <div>

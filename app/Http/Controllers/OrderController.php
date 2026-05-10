@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CartItem;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,29 +24,35 @@ class OrderController extends Controller
         return view('cart_shipping', compact('user'));
     }
 
-    public function payment(Request $request)
+
+    public function processShipping(Request $request)
     {
-        if (empty(session('cart', []))) {
-            return redirect()->route('cart');
-        }
-
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
         $shipping = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:50',
+            'last_name' => 'required|string|max:50',
             'email' => 'required|email',
-            'phone' => 'nullable|string|max:30',
+            'phone' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:30',
             'country' => 'required|string',
-            'city' => 'required|string',
-            'postal_code' => 'required|string|max:20',
-            'address' => 'required|string',
-            'address2' => 'nullable|string',
+            'city' => 'required|string|max:100',
+            'postal_code' => 'required|string|max:12',
+            'address' => 'required|string|max:255',
+            'address2' => 'nullable|string|max:255',
+        ],
+        [   // Error messages
+            'phone.regex' => 'Invalid phone number',
         ]);
 
+
         session(['shipping' => $shipping]);
+
+        return redirect()->route('orders.payment'); // Редирект на GET маршрут
+    }
+
+    public function payment()
+    {
+        if (empty(session('cart')) || empty(session('shipping'))) {
+            return redirect()->route('cart.shipping');
+        }
 
         $cart = session('cart', []);
         $total = collect($cart)->sum(fn ($i) => $i['price'] * $i['quantity']);
@@ -68,6 +75,21 @@ class OrderController extends Controller
 
         $request->validate([
             'payment_method' => 'required|in:card,paypal,bank',
+            'card_name' => 'required|string|max:255',
+            'card_number' => [
+                'required',
+                'regex:/^[0-9\s]{13,19}$/' // Only numbers
+            ],
+            'mmyy' => [
+                'required',
+                'regex:/^(0[1-9]|1[0-2])\/?([0-9]{2})$/' // MM/YY
+            ],
+            'cvv' => 'required|numeric|digits:3',
+
+        ], [ // Error messages
+            'card_number.regex' => 'Invalid card number.',
+            'mmyy.regex' => 'Invalid MM/YY',
+            'cvv.digits'        => 'Invalid CVV',
         ]);
 
         $total = collect($cart)->sum(fn ($i) => $i['price'] * $i['quantity']);
@@ -91,9 +113,8 @@ class OrderController extends Controller
         }
 
         session()->forget(['cart', 'shipping']);
-
-        return redirect()->route('orders.show', $order)
-            ->with('success');
+        CartItem::where('user_id', Auth::id())->delete();
+        return redirect()->route('orders.show', $order)->with('success');
     }
 
     public function show(Order $order)

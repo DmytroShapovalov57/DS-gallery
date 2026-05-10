@@ -19,7 +19,7 @@
         <div style="width:100%;max-width:500px">
             <h1>Payment details</h1>
 
-            <form method="POST" action="{{ route('orders.store') }}">
+            <form method="POST" action="{{ route('orders.store') }}" novalidate>
                 @csrf
 
                 {{-- Payment method tabs --}}
@@ -38,30 +38,29 @@
                     </label>
                 </div>
 
-                @if ($errors->any())
-                    <div class="alert alert-danger py-2 mb-3" style="font-size:13px">
-                        {{ $errors->first() }}
-                    </div>
-                @endif
+                @include('error')
 
                 <div class="mb-3">
                     <label class="form-label small fw-semibold">Cardholder name</label>
-                    <input class="form-control" type="text"
-                           value="{{ Auth::user()?->name }}" placeholder="Willem Dafoe"/>
+                    <input class="form-control" type="text" name="card_name"
+                           value="{{ old('card_name', Auth::user()?->name) }}"placeholder="Willem Dafoe"/>
                 </div>
+
                 <div class="mb-3">
                     <label class="form-label small fw-semibold">Card number</label>
-                    <input class="form-control" type="text"
-                           placeholder="1234 1234 1234 1234" maxlength="19"/>
+                    <input class="form-control" type="text" name="card_number"
+                           value="{{ old('card_number') }}" placeholder="1234 1234 1234 1234" maxlength="19" />
                 </div>
+
                 <div class="row g-3 mb-4">
                     <div class="col-6">
                         <label class="form-label small fw-semibold">Expiry date</label>
-                        <input class="form-control" type="text" placeholder="MM/YY" maxlength="5"/>
+                        <input class="form-control" type="text" name="mmyy"
+                               value="{{ old('mmyy') }}" placeholder="MM/YY" maxlength="5" />
                     </div>
                     <div class="col-6">
                         <label class="form-label small fw-semibold">CVV</label>
-                        <input class="form-control" type="password" placeholder="•••" maxlength="3"/>
+                        <input class="form-control" type="password" name="cvv" placeholder="•••" maxlength="3" />
                     </div>
                 </div>
 
@@ -70,10 +69,7 @@
                 </button>
 
                 <div class="mt-3">
-                    <a href="{{ route('cart.shipping') }}"
-                       style="font-size:13px;color:var(--muted);text-decoration:none">
-                        ← Back to shipping
-                    </a>
+                    <a href="{{ route('cart.shipping') }}" style="font-size:13px;color:var(--muted);text-decoration:none">← Back to shipping</a>
                 </div>
 
             </form>

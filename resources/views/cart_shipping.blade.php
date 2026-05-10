@@ -19,29 +19,20 @@
         <div style="width:100%;max-width:500px">
             <h1 class="mb-3">Shipping information</h1>
 
-            <form method="POST" action="{{ route('cart.payment.show') }}">
+            <form method="POST" action="{{ route('cart.shipping.process') }}" novalidate>
                 @csrf
-
-                @if ($errors->any())
-                    <div class="alert alert-danger py-2 mb-3" style="font-size:13px">
-                        <ul class="mb-0 ps-3">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                @include('error')
 
                 <div class="row g-3 mb-3">
                     <div class="col-6">
                         <label class="form-label small fw-semibold">First Name</label>
                         <input class="form-control" type="text" name="first_name"
-                               placeholder="Willem" value="{{ old('first_name') }}" required/>
+                               placeholder="Willem" value="{{ old('first_name') }}" />
                     </div>
                     <div class="col-6">
                         <label class="form-label small fw-semibold">Last Name</label>
                         <input class="form-control" type="text" name="last_name"
-                               placeholder="Dafoe" value="{{ old('last_name') }}" required/>
+                               placeholder="Dafoe" value="{{ old('last_name') }}" />
                     </div>
                 </div>
 
@@ -49,7 +40,7 @@
                     <label class="form-label small fw-semibold">Email</label>
                     <input class="form-control" type="email" name="email"
                            value="{{ old('email', Auth::user()?->email) }}"
-                           placeholder="email@example.com" required/>
+                           placeholder="email@example.com" />
                 </div>
 
                 <div class="mb-3">
@@ -60,7 +51,7 @@
 
                 <div class="mb-3">
                     <label class="form-label small fw-semibold">Country</label>
-                    <select class="form-select" name="country" required>
+                    <select class="form-select" name="country" >
                         @foreach (['Slovakia','Czech Republic','Austria','Germany','Hungary'] as $c)
                             <option {{ old('country') === $c ? 'selected' : '' }}>{{ $c }}</option>
                         @endforeach
@@ -71,19 +62,19 @@
                     <div class="col-8">
                         <label class="form-label small fw-semibold">City</label>
                         <input class="form-control" type="text" name="city"
-                               placeholder="Bratislava" value="{{ old('city') }}" required/>
+                               placeholder="Bratislava" value="{{ old('city') }}" />
                     </div>
                     <div class="col-4">
                         <label class="form-label small fw-semibold">Postal code</label>
                         <input class="form-control" type="text" name="postal_code"
-                               placeholder="81101" value="{{ old('postal_code') }}" required/>
+                               placeholder="81101" value="{{ old('postal_code') }}" />
                     </div>
                 </div>
 
                 <div class="mb-4">
                     <label class="form-label small fw-semibold">Street address</label>
                     <input class="form-control mb-2" type="text" name="address"
-                           placeholder="Street and house number" value="{{ old('address') }}" required/>
+                           placeholder="Street and house number" value="{{ old('address') }}" />
                     <input class="form-control" type="text" name="address2"
                            placeholder="Apartment, floor (optional)" value="{{ old('address2') }}"/>
                 </div>

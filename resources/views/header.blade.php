@@ -10,10 +10,11 @@
 
     <div class="d-flex align-items-center gap-2">
 
-        <form method="GET" action="{{ route('products') }}" class="d-flex align-items-center">
+        <form method="GET" action="{{ (auth()->check() && auth()->user()->is_admin) ? route('admin.products') : route('products') }}"
+              class="d-flex align-items-center">
             <div class="search-wrap">
                 <input type="text" name="search" placeholder="Search…"
-                       value="{{ request()->routeIs('products') ? request('search') : '' }}"/>
+                       value="{{ (request()->routeIs('products') || request()->routeIs('admin.products')) ? request('search') : '' }}"/>
                 <img class="icon-search" src="{{ asset('icons/search.svg') }}" alt=""/>
             </div>
         </form>

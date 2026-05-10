@@ -16,7 +16,7 @@
     @include('sidebar')
 
     <main class="p-4 overflow-y-auto flex-grow-1">
-        <form method="POST" action="{{ route('admin.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('admin.store') }}" enctype="multipart/form-data" novalidate>
             @csrf
 
             <div class="row g-4 align-items-start">
@@ -37,25 +37,25 @@
                     <div>
                         <div class="muted-label mb-1">TITLE</div>
                         <input class="edit-input" type="text" name="title"
-                               placeholder="Café Terrace at Night" value="{{ old('title') }}" required/>
+                               placeholder="Café Terrace at Night" value="{{ old('title') }}" />
                     </div>
 
                     <div>
                         <div class="muted-label mb-1">ARTIST</div>
                         <input class="edit-input" type="text" name="artist"
-                               placeholder="Vincent van Gogh" value="{{ old('artist') }}" required/>
+                               placeholder="Vincent van Gogh" value="{{ old('artist') }}" />
                     </div>
 
                     <div>
                         <div class="muted-label mb-1">DATE</div>
                         <input class="edit-input" type="number" name="year"
-                               placeholder="1888" value="{{ old('year') }}" required/>
+                               placeholder="1888" value="{{ old('year') }}" />
                     </div>
 
                     <div>
                         <div class="muted-label mb-1">GENRE</div>
                             <input class="edit-input" type="text" name="genre"
-                               list="genreList" placeholder="Impressionism" value="{{ old('genre') }}" required/>
+                               list="genreList" placeholder="Impressionism" value="{{ old('genre') }}" />
                         <datalist id="genreList">
                             @foreach ($genres as $g)<option value="{{ $g }}">@endforeach
                         </datalist>
@@ -72,7 +72,7 @@
                     <div>
                         <div class="muted-label mb-1">PRICE (€)</div>
                         <input class="edit-input" type="number" name="price" step="0.01"
-                               placeholder="0" value="{{ old('price') }}" required/>
+                               placeholder="0" value="{{ old('price') }}" />
                     </div>
 
                     <div>

@@ -31,8 +31,8 @@ Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear')
 
 // Checkout
 Route::get('/cart/shipping',[OrderController::class, 'shipping'])->name('cart.shipping');
-Route::post('/cart/shipping',[OrderController::class, 'payment'])->name('cart.payment.show');
-Route::get('/cart/payment', fn () => redirect()->route('cart.shipping'))->name('cart.payment');
+Route::post('/cart/shipping', [OrderController::class, 'processShipping'])->name('cart.shipping.process');
+Route::get('/cart/payment', [OrderController::class, 'payment'])->name('orders.payment');
 Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 

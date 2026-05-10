@@ -68,6 +68,8 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+        ],
+        [   // Error messages
         ]);
 
         if (Auth::attempt($credentials)) {
@@ -86,8 +88,10 @@ class AuthController extends Controller
         $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:DS_Users,email',
             'password' => 'required|min:8|confirmed',
+        ],
+        [   // Error messages
         ]);
 
         $user = User::create([

@@ -19,8 +19,9 @@
         <div style="width:100%;max-width:500px">
             <h1 class="mb-3">Create account</h1>
 
-            <form method="POST" action="{{ route('register') }}">
+            <form method="POST" action="{{ route('register') }}" novalidate>
                 @csrf
+                @include('error')
 
                 <div class="row g-3 mb-3">
                     <div class="col-6">
@@ -47,16 +48,6 @@
                     <label class="form-label small fw-semibold">Confirm password</label>
                     <input class="form-control" type="password" name="password_confirmation" placeholder="••••••••"/>
                 </div>
-
-                @if ($errors->any())
-                    <div class="alert alert-danger py-2 mb-3" style="font-size:13px">
-                        <ul class="mb-0 ps-3">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
 
                 <button type="submit" class="btn btn-dark w-100 mb-3">Create account</button>
             </form>

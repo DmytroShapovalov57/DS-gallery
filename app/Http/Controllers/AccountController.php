@@ -21,7 +21,7 @@ class AccountController extends Controller
     {
         $user = Auth::user();
 
-        $data = $request->validate(['name' => 'required|string|max:255', 'email' => 'required|email|unique:users,email,' . $user->id,]);
+        $data = $request->validate(['name' => 'required|string|max:255', 'email' => 'required|email|unique:DS_Users,email' . $user->id,]);
 
         $user->update($data);
 
