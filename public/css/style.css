@@ -390,35 +390,50 @@ img.art-image {
     color: var(--fg);
 }
 
-/* Mobile only */
 @media (max-width: 575px) {
-    h1 { font-size: 26px; }
-    .d-flex.flex-grow-1.overflow-hidden { flex-direction: column;}
-    .news-card { grid-template-columns: 1fr; }
+    .d-flex.flex-grow-1 {
+        flex-direction: column !important;
+    }
+
     aside {
-        width: 80px;
+        width: 100% !important;
+        border-right: none !important;
+        border-bottom: 1px solid var(--border);
     }
+
     aside nav {
-        padding: 4px 6px;
-        align-items: center;
+        flex-direction: row !important;
+        padding: 8px !important;
+        gap: 8px !important;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
     }
+
     .side-link {
-        width: 70px;
-        height: 36px;
-        font-size: 11px;
+        width: auto !important;
+        height: auto !important;
+        padding: 6px 14px !important;
+        font-size: 12px !important;
+        flex-shrink: 0;
     }
-    .filter-panel {
-        width: 160px;
-        padding: 15px 10px;
-        font-size: 11px;
+
+    h1 {
+        font-size: 22px !important;
+        margin-bottom: 15px !important;
     }
-    .filter-panel .muted-label {
-        font-size: 9px;
-        letter-spacing: 0.5px;
-        margin-top: 12px;
+
+    main {
+        padding: 15px !important;
     }
-    .filter-check label {
-        font-size: 11px;
-        gap: 4px;
+
+    /* 6. Adjust large image containers */
+    .news-card {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+    }
+
+    .day-wrap {
+        height: 250px !important;
     }
 }
